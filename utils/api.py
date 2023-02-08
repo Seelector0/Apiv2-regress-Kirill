@@ -1,19 +1,16 @@
-from conftest import access_token
 from utils.http_method import HttpMethods
-
 
 """Методы для тестирования GoogleMapsApi"""
 
-base_url = "http://apiv2.localhost" #Базовая URL
+base_url = "http://apiv2.localhost"
 
-class MetashipApi():
 
+class MetashipApi:
     """Метод для создания магазина"""
 
     @staticmethod
     def create_shop(headers):
-
-        post_resource = "/v2/customer/shops" # endopoint метода GET
+        post_resource = "/v2/customer/shops"
 
         json_for_create_new_shop = {
             "name": "Test Shop 2023-02-07T08:55:23.436Z",
@@ -44,17 +41,13 @@ class MetashipApi():
         put_resource = "/v2/customer/shops/"
 
         json_for_put_shop = {
-            "name":"Test Shop R 2023-02-07T14:10:05.652Z",
-            "uri":"ezequiel.biz",
-            "phone":"75672955802",
-            "sender":"Juana Hagenes"
+            "name": "Test Shop R 2023-02-07T14:10:05.652Z",
+            "uri": "ezequiel.biz",
+            "phone": "75672955802",
+            "sender": "Juana Hagenes"
         }
 
         put_url = f'{base_url}{put_resource}{shop_id}'
         print(put_url)
         result_put = HttpMethods.put(put_url, json_for_put_shop, headers)
         return result_put
-
-
-
-
