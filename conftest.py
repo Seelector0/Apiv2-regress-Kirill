@@ -16,10 +16,3 @@ def access_token():
         # 'Content-Type': "application/json"
     }
     return token
-
-    # if "access_token" in resource.json():
-    #     token = resource.json()['access_token']
-    #     return token
-    # elif "error" in resource.json():
-    #     print(f'Ошибка токена: {resource.json()}')
-

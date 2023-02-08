@@ -3,7 +3,9 @@ import requests
 from utils.logger import Logger
 
 """Список HTTP методов"""
-class HttpMethods():
+
+
+class HttpMethods:
 
     @staticmethod
     def get(url, headers):
@@ -44,4 +46,3 @@ class HttpMethods():
             result = requests.delete(url, headers=headers)
             Logger.add_responce(result)
             return result
-
