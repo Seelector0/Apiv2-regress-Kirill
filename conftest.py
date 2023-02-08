@@ -23,5 +23,3 @@ def access_token():
     # elif "error" in resource.json():
     #     print(f'Ошибка токена: {resource.json()}')
 
-
-print(Env.client_id)
