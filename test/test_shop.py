@@ -1,5 +1,3 @@
-import requests
-
 from utils.api import MetashipApi
 
 
@@ -18,6 +16,3 @@ def test_create_new_shop(access_token):
 
     print("Метод GET")
     result_get = MetashipApi.get_shop(shop_id, access_token)
-
-
-
