@@ -1,6 +1,7 @@
 from conftest import access_token
 from utils.http_method import HttpMethods
 
+
 """Методы для тестирования GoogleMapsApi"""
 
 base_url = "http://apiv2.localhost" #Базовая URL
