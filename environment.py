@@ -3,6 +3,8 @@ import os
 
 load_dotenv()
 
+"""Выбор окружения в зависимости от указанного в фале .env"""
+
 
 class Env:
     if os.environ.get('STAGE') == 'Local':
@@ -13,5 +15,3 @@ class Env:
         URL = os.environ.get('URL')
         client_id = os.environ.get('CLIENT_ID')
         client_secret = os.environ.get('CLIENT_SECRET')
-
-

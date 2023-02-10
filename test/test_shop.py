@@ -11,8 +11,17 @@ def test_create_new_shop(access_token):
     print("Метод GET")
     result_get = MetashipApi.get_shop(shop_id, access_token)
 
+    print("Метод GET ALL")
+    result_get = MetashipApi.get_shop_all(access_token)
+
     print("Метод PUT")
     result_get = MetashipApi.put_shop(shop_id, access_token)
+
+    print("Метод GET")
+    result_get = MetashipApi.get_shop(shop_id, access_token)
+
+    print("Метод PATCH")
+    result_get = MetashipApi.patch_shop(shop_id, access_token)
 
     print("Метод GET")
     result_get = MetashipApi.get_shop(shop_id, access_token)
