@@ -77,3 +77,13 @@ class MetashipApi:
         print(patch_url)
         result_patch_shop = HttpMethods.patch(patch_url, json_for_patch_shop, headers)
         return result_patch_shop
+
+    """Метод для удаления магазина"""
+
+    @staticmethod
+    def delete_shop(shop_id, headers):
+        delete_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
+        print(delete_url)
+        result_delete_shop = HttpMethods.delete(delete_url, headers)
+        print(result_delete_shop)
+        return result_delete_shop
