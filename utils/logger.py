@@ -2,12 +2,12 @@ import datetime
 import os
 
 
-class Logger():
+class Logger:
     file_name = f'logs/log_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.log'
 
     @classmethod
     def write_log_to_file(cls, data: str):
-        with open(cls.file_name, 'a', encoding = 'utf=8') as logger_file:
+        with open(cls.file_name, 'a', encoding='utf=8') as logger_file:
             logger_file.write(data)
 
     @classmethod
@@ -21,10 +21,10 @@ class Logger():
         data_to_add += f'Request URL: {url}\n'
         data_to_add += '\n'
 
-        cls.write_log_to_file(data_to_add)# обращаемся к методу который записывает в лог данные
+        cls.write_log_to_file(data_to_add)  # обращаемся к методу который записывает в лог данные
 
     @classmethod
-    def add_responce(cls, result):
+    def add_response(cls, result):
         headers_as_dict = dict(result.headers)
         cookies_as_dict = dict(result.cookies)
 
@@ -34,6 +34,4 @@ class Logger():
         data_to_add += f'Response cookies: {cookies_as_dict}\n'
         data_to_add += f'\n-----\n'
 
-        cls.write_log_to_file(data_to_add)# обращаемся к методу который записывает в лог данные
-
-
+        cls.write_log_to_file(data_to_add)  # обращаемся к методу который записывает в лог данные
