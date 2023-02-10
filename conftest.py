@@ -13,6 +13,5 @@ def access_token():
     resource = requests.post('http://apiv2.localhost/auth/access_token', data=data, headers=headers)
     token = {
         "Authorization": f"Bearer {resource.json()['access_token']}"
-        # 'Content-Type': "application/json"
     }
     return token
