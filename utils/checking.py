@@ -1,4 +1,5 @@
 """Методы для проверки ответов наших запросов"""
+import allure
 
 
 class Checking:
@@ -6,18 +7,21 @@ class Checking:
 
     @staticmethod
     def check_status_code(result, status_code):
-        assert status_code == result.status_code, \
-                f"Не ожидаемый status code! Ожидаемый: {status_code}. Фактический: {result.status_code}"
-        print(f'Статус код: {status_code} PASSED')
+        with allure.step(f"Статус код в ответе {status_code}"):
+            assert status_code == result.status_code, \
+                f"Статус код не верный! Ожидаемый: {status_code}. Фактический: {result.status_code}"
+            print(f'Статус код: {status_code} PASSED')
 
     """Метод для проверки наличия обязательных полей в ответе запроса"""
 
     @staticmethod
     def check_json_token(result, expected_value):
-        token = result.json()  # модулем json преобразуем строку в формат json result.json() json.loads(result.text)
-        assert list(token) == expected_value
-        print(list(token))
-        print("Все поля присутствуют")
+        with allure.step(f"Обязательные поля {expected_value} присутствуют"):
+            token = result.json()  # модулем json преобразуем строку в формат json result.json() json.loads(result.text)
+            assert list(token) == expected_value, \
+                f"Поля не верные! Фактические: {list(token)}. Ожидаемые: {expected_value}"
+            print(list(token))
+            print("Все поля присутствуют")
 
     """Метод для проверки значений обязательных полей в ответе запроса"""
 
