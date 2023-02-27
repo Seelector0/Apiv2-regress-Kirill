@@ -7,7 +7,7 @@ class Checking:
 
     @staticmethod
     def check_status_code(result, status_code):
-        with allure.step(f"Статус код в ответе {status_code}"):
+        with allure.step(f"Статус код в ответе {status_code}"):  # добавляем отображение в allure проверки
             assert status_code == result.status_code, \
                 f"Статус код не верный! Ожидаемый: {status_code}. Фактический: {result.status_code}"
             print(f'Статус код: {status_code} PASSED')
@@ -30,7 +30,7 @@ class Checking:
             check = result.json()
             check_info = check.get(field_name)
             assert check_info == expected_value
-            print(f'{field_name} верен!!!')
+            print(f'{field_name} верный!')
 
     # """Метод для проверки значений обязательных полей в ответе по заданному слову"""
     #

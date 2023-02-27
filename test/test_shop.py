@@ -15,6 +15,7 @@ class TestShop:
         Checking.check_status_code(result_post_shop, 201)
         Checking.check_json_key(result_post_shop, ['id', 'type', 'url', 'status'])
         Checking.check_json_value(result_post_shop, field_name='type', expected_value='Shop')
+        Checking.check_json_value(result_post_shop, field_name='status', expected_value=201)
 
 
 

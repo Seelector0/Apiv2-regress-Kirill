@@ -9,11 +9,11 @@ class HttpMethods:
 
     @staticmethod
     def get(url, headers):
-        with allure.step(f"Метод GET {url}"):
-            Logger.add_request(url, method="GET")
-            result = requests.get(url, headers=headers)
-            Logger.add_response(result)
-            return result
+        with allure.step(f"Метод GET {url}"):  # отображение в allure
+            Logger.add_request(url, method="GET")  # пишем в лог запрос
+            result = requests.get(url, headers=headers)  # определяем как выглядит запрос и какие параметры должны быть
+            Logger.add_response(result)  # пишем в лог ответ
+            return result  # отдаем результат
 
     @staticmethod
     def post(url, body, headers):
