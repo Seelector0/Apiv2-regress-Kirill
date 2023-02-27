@@ -1,4 +1,5 @@
-/logs/
 /.pytest_cache/
 /.env
 /test_results/
+/int/
+/logs/*log*

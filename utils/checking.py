@@ -15,28 +15,28 @@ class Checking:
     """Метод для проверки наличия обязательных полей в ответе запроса"""
 
     @staticmethod
-    def check_json_token(result, expected_value):
+    def check_json_key(result, expected_value):
         with allure.step(f"Обязательные поля {expected_value} присутствуют"):
             token = result.json()  # модулем json преобразуем строку в формат json result.json() json.loads(result.text)
             assert list(token) == expected_value, \
                 f"Поля не верные! Фактические: {list(token)}. Ожидаемые: {expected_value}"
-            print(list(token))
-            print("Все поля присутствуют")
+            print(f'Все поля присутствуют{list(token)}')
 
     """Метод для проверки значений обязательных полей в ответе запроса"""
 
     @staticmethod
     def check_json_value(result, field_name, expected_value):
-        check = result.json()
-        check_info = check.get(field_name)
-        assert check_info == expected_value
-        print(f'{field_name} верен!!!')
+        with allure.step(f"Обязательные значения {expected_value} присутствуют"):
+            check = result.json()
+            check_info = check.get(field_name)
+            assert check_info == expected_value
+            print(f'{field_name} верен!!!')
 
-    """Метод для проверки значений обязательных полей в ответе по заданному слову"""
-
-    @staticmethod
-    def check_json_search_word_in_value(result, field_name, search_word):
-        check = result.json()
-        check_info = check.get(field_name)
-        assert search_word in check_info
-        print(f'Слово {search_word} присутствует!!!')
+    # """Метод для проверки значений обязательных полей в ответе по заданному слову"""
+    #
+    # @staticmethod
+    # def check_json_search_word_in_value(result, field_name, search_word):
+    #     check = result.json()
+    #     check_info = check.get(field_name)
+    #     assert search_word in check_info
+    #     print(f'Слово {search_word} присутствует!!!')
