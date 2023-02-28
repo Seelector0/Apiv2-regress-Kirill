@@ -1,4 +1,6 @@
 """Методы для проверки ответов наших запросов"""
+import re
+
 import allure
 
 
@@ -10,33 +12,45 @@ class Checking:
         with allure.step(f"Статус код в ответе {status_code}"):  # добавляем отображение в allure проверки
             assert status_code == result.status_code, \
                 f"Статус код не верный! Ожидаемый: {status_code}. Фактический: {result.status_code}"
-            print(f'Статус код: {status_code} PASSED')
+            # print(f'Статус код: {status_code} PASSED')
 
-    """Метод для проверки наличия обязательных полей в ответе запроса"""
+    """Метод для проверки наличия обязательных ключей в ответе запроса"""
 
     @staticmethod
-    def check_json_key(result, expected_value):
-        with allure.step(f"Обязательные поля {expected_value} присутствуют"):
+    def check_json_required_keys(result, required_key):
+        with allure.step(f"Обязательные ключи {required_key} присутствуют"):
             token = result.json()  # модулем json преобразуем строку в формат json result.json() json.loads(result.text)
-            assert list(token) == expected_value, \
-                f"Поля не верные! Фактические: {list(token)}. Ожидаемые: {expected_value}"
-            print(f'Все поля присутствуют{list(token)}')
+            assert list(token) == required_key, \
+                f"Ключи не верные! Фактические: {list(token)}. Ожидаемые: {required_key}"
+            # print(f'Обязательные ключи {list(token)} присутствуют')
 
-    """Метод для проверки значений обязательных полей в ответе запроса"""
+    """Метод для проверки значения в ответе запроса"""
 
     @staticmethod
-    def check_json_value(result, field_name, expected_value):
-        with allure.step(f"Обязательные значения {expected_value} присутствуют"):
+    def check_json_value(result, key_name, expected_value):
+        with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
             check = result.json()
-            check_info = check.get(field_name)
-            assert check_info == expected_value
-            print(f'{field_name} верный!')
+            check_info = check.get(key_name)
+            assert check_info == expected_value, \
+                f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. Ожидаемое: {expected_value}"
+            # print(f'Ожидаемое значение {expected_value} присутствуют')
 
-    # """Метод для проверки значений обязательных полей в ответе по заданному слову"""
-    #
+    """Метод для проверки по регулярному выражению, выбираем определенное значение с помощью regexp и сравниваем"""
+
+    @staticmethod
+    def check_json_search_regexp_in_value(result, regexp_pattern, check_value):
+        with allure.step(f"Значение {result} из ответа соответствует {check_value}"):
+            result = re.search(regexp_pattern, result)
+            assert check_value == result.group(1), \
+                f"Значение {result} из ответа не соответствует {check_value}"
+            # print(f'Значение из ответа {result} соответствует {check_value}')
+
+    # """Метод для проверки слова в ответе по заданному значению"""
+
     # @staticmethod
     # def check_json_search_word_in_value(result, field_name, search_word):
-    #     check = result.json()
-    #     check_info = check.get(field_name)
-    #     assert search_word in check_info
-    #     print(f'Слово {search_word} присутствует!!!')
+    #     with allure.step(f"Значение {search_word} присутствуют"):
+    #         check = result.json()
+    #         check_info = check.get(field_name)
+    #         assert search_word in check_info
+    #         print(f'Слово {search_word} присутствует!!!')
