@@ -3,7 +3,7 @@ import requests
 from environment import Env
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def access_token():
     """Получение Brear_Token"""
 

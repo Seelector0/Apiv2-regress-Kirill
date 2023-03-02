@@ -44,7 +44,50 @@ import re
 
 
 
+#
+# result = re.search('(\/v2\/customer\/warehouses\/)(.+)$', '/v2/customer/warehouses/4932d0ca-096c-4464-8fb8-eef509d9f86b')
+# print(result)
+# print(f'\033[1m vcx')
 
-result = re.search('(\/v2\/customer\/warehouses\/)(.+)$', '/v2/customer/warehouses/4932d0ca-096c-4464-8fb8-eef509d9f86b')
-print(result)
-print(f'\033[1m vcx')
+
+import psycopg2
+from psycopg2 import Error
+
+
+def clear_db(shop_id='null', warehouse_id='null'):
+    try:
+        # Подключение к базе данных
+        connection = psycopg2.connect(user="metaship",
+                                      password="ohiXahfPbWVeSfF7uMsBYjWD",
+                                      host="localhost",
+                                      port="5432",
+                                      database="metaship")
+
+        # # Курсор для выполнения операций с базой данных
+        cursor = connection.cursor()
+
+        # Выполнение SQL-запроса для удаления магазинов
+        cursor.execute(f"Delete from customer.shop where id NOT IN ({shop_id})")
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Запись о магазинах успешно удалена")
+
+        # Выполнение SQL-запроса для удаления склада
+        cursor.execute(f"DELETE FROM customer.warehouse where id != {warehouse_id}")
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Запись о складах успешно удалена")
+
+    except (Exception, Error) as error:
+        print("Ошибка при работе с PostgreSQL", error)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("Соединение с PostgreSQL закрыто")
+
+# Указать магазин и склад, который не нужно удалять
+shop_id = f"'0aa93846-8b8c-4393-8897-40ed9d74c8dc', '5b0291e4-70de-4684-94e2-6a1ab8a3b802'"
+# warehouse_id = f"'25281a75-15f1-451b-baeb-46ca6eb7c7cc'"
+
+clear_db(shop_id=shop_id)

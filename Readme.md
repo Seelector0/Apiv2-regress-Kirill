@@ -4,6 +4,7 @@ pytest
 requests   
 dotenv  
 OS    
+pip install psycopg2-binary
 
 Скопировать файла .env.example в .env  
 Необходимый стенд указать в файле .env  
