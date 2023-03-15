@@ -1,6 +1,5 @@
 import allure
 
-from conftest import new_warehouse, new_shop
 from utils.api_shop import ShopApi
 from utils.api_warehouse import WarehouseApi
 from utils.checking import Checking
@@ -81,22 +80,22 @@ def test_flow_warehouse(new_warehouse, access_token):
     Checking.check_json_value(result=result_get_warehouse, key_name='visibility', expected_value=True)
     Checking.check_json_search_regexp_in_value(result=result_get_warehouse.json().get('name'),
                                                check_value="Test Warehouse", regexp_pattern=r'(Test Warehouse).+$')
+    print("Получение списка складов GET")
+    result_get_all_warehouses = WarehouseApi.get_warehouse_all(access_token)
+    Checking.check_status_code(result_get_all_warehouses, 200)
+    Checking.check_json_required_keys_obj(result=result_get_all_warehouses, required_key=['id', 'number', 'name',
+                                                                                          'visibility', 'address',
+                                                                                          'contact', 'workingTime',
+                                                                                          'pickup', 'dpdPickupNum',
+                                                                                          'comment'])
 
-    # print("Получение списка складов GET")
-    # result_get_all_warehouses = WarehouseApi.get_warehouse_all(access_token)
-    # Checking.check_status_code(result_get_all_warehouses, 200)
-    # Checking.check_json_required_keys(result=result_get_all_warehouses, required_key=['id', 'number', 'name',
-    #                                                                                   'visibility', 'address',
-    #                                                                                   'contact', 'workingTime',
-    #                                                                                   'pickup', 'dpdPickupNum',
-    #                                                                                   'comment'])
 
-# def test_create_new_order(new_warehouse, new_shop):
-#     result_post_warehouse = new_warehouse
-#     warehouse_id = result_post_warehouse.json().get('id')
-#     result_post_shop = new_shop
-#     shop_id = result_post_shop.json().get('id')
-#     print('создание заказа')
-#     print(warehouse_id)
-#     print(shop_id)
-#     clear_db(shop_id=f"'{shop_id}'", warehouse_id=f"'{warehouse_id}'")
+def test_create_new_order(new_warehouse, new_shop):
+    result_post_warehouse = new_warehouse
+    warehouse_id = result_post_warehouse.json().get('id')
+    result_post_shop = new_shop
+    shop_id = result_post_shop.json().get('id')
+    print('создание заказа')
+    print(warehouse_id)
+    print(shop_id)
+    clear_db(shop_id=f"'{shop_id}'", warehouse_id=f"'{warehouse_id}'")

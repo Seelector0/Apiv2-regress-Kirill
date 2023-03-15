@@ -34,12 +34,13 @@ class Checking:
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
     """Метод для проверки наличия ключей обязательных в массиве, не обязательно указывать все ключи"""
+
     @staticmethod
     def check_json_required_keys_obj(result, required_key):
         with allure.step(f"Ключи {required_key} присутствуют"):
             for obj in result.json():
                 assert all(key in obj for key in required_key), \
-                f"Ключи не верные! Фактические: {list(result.json())}. Ожидаемые: {required_key}"
+                    f"Ключи не верные! Фактические: {list(result.json())}. Ожидаемые: {required_key}"
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
     """Метод для проверки значения в ответе запроса"""
@@ -50,9 +51,9 @@ class Checking:
             check = result.json()
             check_info = check.get(key_name)
             assert check_info == expected_value, \
-                f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. Ожидаемое: {expected_value}"
+                f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
+                f"Ожидаемое: {expected_value}"
             # print(f'Ожидаемое значение {expected_value} присутствуют')
-
 
     """Метод для проверки по регулярному выражению, выбираем определенное значение с помощью regexp и сравниваем"""
 
