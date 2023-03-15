@@ -91,12 +91,3 @@ import re
 # # warehouse_id = f"'25281a75-15f1-451b-baeb-46ca6eb7c7cc'"
 #
 # clear_db(shop_id=shop_id)
-
-def Func1():
-    var1 = 'data'
-    Func2(var1)
-
-def Func2(var1):
-    print(var1)
-
-Func1()

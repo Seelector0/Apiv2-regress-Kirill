@@ -29,21 +29,21 @@ class WarehouseApi:
 
     @staticmethod
     def get_warehouse_all(headers):
-        get_url = f'{Env.URL}/v2/customer/shops'
+        get_url = f'{Env.URL}/v2/customer/warehouses'
         # print(get_url)
-        result_get_shop_all = HttpMethods.get(get_url, headers)
+        result_get_warehouse_all = HttpMethods.get(get_url, headers)
         # print(result_get_shop_all.text)
-        return result_get_shop_all
+        return result_get_warehouse_all
 
     """Метод для проверки склада"""
 
     @staticmethod
-    def get_warehouse(shop_id, headers):
-        get_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
+    def get_warehouse(warehouse_id, headers):
+        get_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
         # print(get_url)
-        result_get_shop = HttpMethods.get(get_url, headers)
+        result_get_warehouse = HttpMethods.get(get_url, headers)
         # print(result_get_shop.text)
-        return result_get_shop
+        return result_get_warehouse
 
     """Метод для обновления склада"""
 
