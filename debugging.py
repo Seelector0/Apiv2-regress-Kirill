@@ -5,6 +5,7 @@
 # print(randint(100, 9999))
 import re
 
+
 # jsons = {
 #     "name": 'Shop Int PUT',
 #     "uri": '345345',
@@ -41,7 +42,6 @@ import re
 # CheckCases.check_if_response_value_match_regexp_as_expected(target=result_json['url'],
 #                                                                     regexp_pattern=r'\/warehouses\/(.+)$',
 #                                                                     check_value=self.WAREHOUSE_ID)
-
 
 
 #
@@ -91,3 +91,24 @@ import re
 # # warehouse_id = f"'25281a75-15f1-451b-baeb-46ca6eb7c7cc'"
 #
 # clear_db(shop_id=shop_id)
+
+
+def new_parcel():
+    listt = []
+    result_post_parcel = [
+        {
+            "id": "c3a1f637-e149-4e80-9a20-78bfc6e83461",
+            "type": "Parcel",
+            "url": "/v2/parcels/c3a1f637-e149-4e80-9a20-78bfc6e83461",
+            "status": 201
+        }
+    ]
+    for parcel_id in result_post_parcel:
+        listt.append(parcel_id["type"])
+    return listt
+
+
+# for array in result.json():
+#     assert all(key in array for key in required_key)
+
+print(new_parcel())

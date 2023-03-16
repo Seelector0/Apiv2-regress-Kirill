@@ -23,24 +23,29 @@ def access_token():
 @pytest.fixture(scope="module")
 def new_shop(access_token):
     result_post_shop = ShopApi.create_shop(headers=access_token)
-    return result_post_shop
+    shop_id = result_post_shop.json().get('id')
+    return shop_id
 
 
 @pytest.fixture(scope="module")
 def new_warehouse(access_token):
     result_post_warehouse = WarehouseApi.create_warehouse(headers=access_token)
-    return result_post_warehouse
+    shop_id = result_post_warehouse.json().get('id')
+    return shop_id
 
 
 @pytest.fixture(scope="module")
 def new_order(access_token, new_shop, new_warehouse):
-    shop_id = new_shop.json().get('id')
-    warehouse_id = new_warehouse.json().get('id')
-    result_post_order = OrderApi.create_order(shop_id=shop_id, warehouse_id=warehouse_id, headers=access_token, sec=6)
-    return result_post_order
+    result_post_order = OrderApi.create_order(shop_id=new_shop, warehouse_id=new_warehouse, headers=access_token, sec=6)
+    order_id = result_post_order.json().get('id')
+    return order_id
 
 @pytest.fixture(scope="module")
 def new_parcel(access_token, new_order):
-    new_order_id = new_order.json().get('id')
-    result_post_parcel = ParcelApi.create_parcel(order_id=new_order_id, headers=access_token)
-    return result_post_parcel
+    parcel_id = []
+    result_post_parcel = ParcelApi.create_parcel(order_id=new_order, headers=access_token)
+    for parcel in result_post_parcel.json():
+        parcel_id.append(parcel["id"])
+    return parcel_id
+
+
