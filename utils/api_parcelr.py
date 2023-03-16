@@ -3,23 +3,24 @@ from utils.http_method import HttpMethods
 from environment import Env
 from random import randint
 
+
 """Методы для тестирования магазина"""
 
 
-class WarehouseApi:
+class ParcelApi:
     """Метод для создания склада"""
 
     @staticmethod
-    def create_warehouse(headers):
-        json_for_create_new_warehouse = {
-            "name": f'Test Warehouse {datetime.datetime.now()}',
-            "address": {
-                "raw": "107045, г Москва, Красносельский р-н, ул Сретенка, д 28"
-            }
-        }
-        post_url = f'{Env.URL}/v2/customer/warehouses'
-        result_post_shop = HttpMethods.post(post_url, json_for_create_new_warehouse, headers)
-        return result_post_shop
+    def create_parcel(headers, order_id):
+        """Создание заказа"""
+        json_for_create_new_parcel = {
+                    "orderIds": [order_id],
+                    "shipmentDate": f"{datetime.date.today()}"
+                }
+        post_url = f'{Env.URL}/v2/parcels'
+        result_post_parcel = HttpMethods.post(post_url, json_for_create_new_parcel, headers)
+
+        return result_post_parcel
 
     """Метод для проверки всех складов"""
 
@@ -62,7 +63,6 @@ class WarehouseApi:
 
     @staticmethod
     def patch_warehouse(shop_id, headers):
-
         json_for_patch_shop = [
             {
                 "op": "replace",

@@ -14,7 +14,7 @@ class Checking:
                 f"Статус код не верный! Ожидаемый: {status_code}. Фактический: {result.status_code}"
             # print(f'Статус код: {status_code} PASSED')
 
-    """Метод для проверки наличия обязательных ключей в ответе запроса, обязательно указываются все ключи"""
+    """Метод для проверки наличия ключей в ответе запроса, обязательно указываются все ключи"""
 
     @staticmethod
     def check_json_required_keys_exact(result, required_key):
@@ -24,7 +24,7 @@ class Checking:
                 f"Ключи не верные! Фактические: {list(token)}. Ожидаемые: {required_key}"
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
-    """Метод для проверки наличия ключей обязательных в ответе запроса, не обязательно указывать все ключи"""
+    """Метод для проверки наличия ключей в ответе запроса, не обязательно указывать все ключи"""
 
     @staticmethod
     def check_json_required_keys(result, required_key):
@@ -33,14 +33,14 @@ class Checking:
                 f"Ключи не верные! Фактические: {list(result.json())}. Ожидаемые: {required_key}"
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
-    """Метод для проверки наличия ключей обязательных в массиве, не обязательно указывать все ключи"""
+    """Метод для проверки наличия ключей в массиве, не обязательно указывать все ключи"""
 
     @staticmethod
-    def check_json_required_keys_obj(result, required_key):
+    def check_json_required_keys_array(result, required_key):
         with allure.step(f"Ключи {required_key} присутствуют"):
-            for obj in result.json():
-                assert all(key in obj for key in required_key), \
-                    f"Ключи не верные! Фактические: {list(result.json())}. Ожидаемые: {required_key}"
+            for array in result.json():
+                assert all(key in array for key in required_key), \
+                    f"Ключи не верные! Фактические: {array}. Ожидаемые: {required_key}"
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
     """Метод для проверки значения в ответе запроса"""

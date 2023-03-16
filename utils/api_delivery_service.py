@@ -6,19 +6,23 @@ from random import randint
 """Методы для тестирования магазина"""
 
 
-class WarehouseApi:
+class DeliveryServiceApi:
     """Метод для создания склада"""
 
     @staticmethod
-    def create_warehouse(headers):
-        json_for_create_new_warehouse = {
-            "name": f'Test Warehouse {datetime.datetime.now()}',
-            "address": {
-                "raw": "107045, г Москва, Красносельский р-н, ул Сретенка, д 28"
+    def create_new_connection_rp(headers, shop_id):
+        json_for_create_new_connection_rp = {
+            "deliveryServiceCode": "RussianPost",
+            "data": {
+                "token": "A_DlNhO2HJGXf2mx5qPyA9Z2qDiqQoiE",
+                "secret": "dkBwaW1wYXkucnU6KEgpeW1beCtPRUoh",
+                "type": "integration",
+                "intakePostOfficeCode": "101000",
+                "externalDeliveryCode": "123"
             }
         }
-        post_url = f'{Env.URL}/v2/customer/warehouses'
-        result_post_shop = HttpMethods.post(post_url, json_for_create_new_warehouse, headers)
+        post_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services'
+        result_post_shop = HttpMethods.post(post_url, json_for_create_new_connection_rp, headers)
         return result_post_shop
 
     """Метод для проверки всех складов"""
@@ -62,7 +66,6 @@ class WarehouseApi:
 
     @staticmethod
     def patch_warehouse(shop_id, headers):
-
         json_for_patch_shop = [
             {
                 "op": "replace",

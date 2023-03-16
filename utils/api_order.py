@@ -2,23 +2,82 @@ import datetime
 from utils.http_method import HttpMethods
 from environment import Env
 from random import randint
-
+import time
 """Методы для тестирования магазина"""
 
 
-class WarehouseApi:
+class OrderApi:
     """Метод для создания склада"""
 
     @staticmethod
-    def create_warehouse(headers):
-        json_for_create_new_warehouse = {
-            "name": f'Test Warehouse {datetime.datetime.now()}',
-            "address": {
-                "raw": "107045, г Москва, Красносельский р-н, ул Сретенка, д 28"
-            }
+    def create_order(headers, warehouse_id, shop_id, sec):
+        """Создание заказа"""
+        json_for_create_new_order = {
+            "warehouse": {
+                "id": warehouse_id
+            },
+            "shop": {
+                "id": shop_id,
+                "number": "RP_1678982530843"
+            },
+            "payment": {
+                "type": "Paid",
+                "declaredValue": 2500,
+                "deliverySum": 180
+            },
+            "dimension": {
+                "length": 869,
+                "width": 886,
+                "height": 171
+            },
+            "weight": 6,
+            "delivery": {
+                "type": "Courier",
+                "service": "RussianPost",
+                "tariff": "24",
+                "date": "",
+                "time": {
+                    "from": "",
+                    "to": ""
+                }
+            },
+            "recipient": {
+                "familyName": "Wilkinson",
+                "firstName": "Godfrey",
+                "secondName": "Mona",
+                "phoneNumber": "+72936656417",
+                "email": "Elva_DuBuque@hotmail.com",
+                "address": {
+                    "raw": "101000, г Москва, ул Жуковского, д 3/4"
+                }
+            },
+            "comment": "Hungary granular",
+            "places": [
+                {
+                    "items": [
+                        {
+                            "article": "EE923147562813020029",
+                            "name": "Chair",
+                            "price": 1000,
+                            "count": 1,
+                            "weight": 1,
+                            "vat": "0"
+                        },
+                        {
+                            "article": "SI57024120327604055",
+                            "name": "Shirt",
+                            "price": 1000,
+                            "count": 1,
+                            "weight": 1,
+                            "vat": "NO_VAT"
+                        }
+                    ]
+                }
+            ]
         }
-        post_url = f'{Env.URL}/v2/customer/warehouses'
-        result_post_shop = HttpMethods.post(post_url, json_for_create_new_warehouse, headers)
+        post_url = f'{Env.URL}/v2/orders'
+        result_post_shop = HttpMethods.post(post_url, json_for_create_new_order, headers)
+        time.sleep(sec)
         return result_post_shop
 
     """Метод для проверки всех складов"""
@@ -62,7 +121,6 @@ class WarehouseApi:
 
     @staticmethod
     def patch_warehouse(shop_id, headers):
-
         json_for_patch_shop = [
             {
                 "op": "replace",
