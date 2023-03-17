@@ -1,12 +1,9 @@
-
 import allure
-
 
 from utils.api_shop import ShopApi
 from utils.api_warehouse import WarehouseApi
 from utils.checking import Checking
 from utils.clear_db import clear_db
-
 
 
 @allure.description("Тестирование магазина")
@@ -70,7 +67,8 @@ def test_flow_warehouse(new_warehouse, access_token):
     Checking.check_json_required_keys(result=result_post_warehouse, required_key=['id', 'type', 'url', 'status'])
     Checking.check_json_value(result=result_post_warehouse, key_name='type', expected_value='Warehouse')
     Checking.check_json_value(result=result_post_warehouse, key_name='status', expected_value=201)
-    Checking.check_json_search_regexp_in_value(result=result_post_warehouse.json().get('url'), check_value=new_warehouse[1],
+    Checking.check_json_search_regexp_in_value(result=result_post_warehouse.json().get('url'),
+                                               check_value=new_warehouse[1],
                                                regexp_pattern=r'\/warehouses\/(.+)$')
 
     print("Получение склада GET")
@@ -94,5 +92,3 @@ def test_flow_warehouse(new_warehouse, access_token):
     print("Обновление склада PUT")
     result_put_warehouse = WarehouseApi.put_warehouse(new_warehouse[1], access_token)
     Checking.check_status_code(result_put_warehouse, 204)
-
-

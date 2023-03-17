@@ -1,4 +1,4 @@
-import allure
+
 import pytest
 import requests
 from environment import Env
@@ -36,9 +36,10 @@ def new_warehouse(access_token):
 
 @pytest.fixture(scope="module")
 def new_order(access_token, new_shop, new_warehouse):
-    result_post_order = OrderApi.create_order(shop_id=new_shop[1], warehouse_id=new_warehouse[1], headers=access_token, sec=0)
+    result_post_order = OrderApi.create_order(shop_id=new_shop[1], warehouse_id=new_warehouse[1], headers=access_token)
     order_id = result_post_order.json().get('id')
     return result_post_order, order_id
+
 
 @pytest.fixture(scope="module")
 def new_parcel(access_token, new_order):

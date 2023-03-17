@@ -5,7 +5,6 @@ import allure
 from utils.http_method import HttpMethods
 from environment import Env
 from random import randint
-import time
 """Методы для тестирования магазина"""
 
 
@@ -13,7 +12,7 @@ class OrderApi:
     """Метод для создания склада"""
 
     @staticmethod
-    def create_order(headers, warehouse_id, shop_id, sec):
+    def create_order(headers, warehouse_id, shop_id):
         """Создание заказа"""
         json_for_create_new_order = {
             "warehouse": {
@@ -80,7 +79,6 @@ class OrderApi:
         }
         post_url = f'{Env.URL}/v2/orders'
         result_post_shop = HttpMethods.post(post_url, json_for_create_new_order, headers)
-        time.sleep(sec)
         return result_post_shop
 
     """Метод для проверки всех складов"""
