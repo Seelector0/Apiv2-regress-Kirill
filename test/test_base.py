@@ -6,12 +6,14 @@ from utils.api_shop import ShopApi
 from utils.api_warehouse import WarehouseApi
 from utils.checking import Checking
 from utils.clear_db import clear_db
+from utils.http_method import HttpMethods
 
 
 @allure.description("Тестирование магазина")
-def test_flow_int_shop(access_token):
+def test_flow_int_shop(new_shop, access_token):
     print(f'\nСоздание магазина POST')
-    result_post_shop = ShopApi.create_shop(headers=access_token)
+    ShopApi.report_post()
+    result_post_shop = new_shop
     shop_id = result_post_shop.json().get('id')
     Checking.check_status_code(result=result_post_shop, status_code=201)
     Checking.check_json_required_keys(result=result_post_shop, required_key=['id', 'type', 'url', 'status'])
