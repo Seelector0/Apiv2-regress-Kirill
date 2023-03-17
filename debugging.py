@@ -113,15 +113,30 @@ import re
 #
 # print(new_parcel())
 
-def new_shop():
-    result_post_shop = {
-    "id": "2cb1545e-2686-4236-aa0b-5a02b61441bb",
-    "type": "Shop",
-    "url": "/v2/customer/shops/2cb1545e-2686-4236-aa0b-5a02b61441bb",
-    "status": 201
-}
-    shop_id = "2cb1545e-2686-4236-aa0b-5a02b61441bb"
-    return result_post_shop, shop_id
+# def new_shop():
+#     result_post_shop = {
+#     "id": "2cb1545e-2686-4236-aa0b-5a02b61441bb",
+#     "type": "Shop",
+#     "url": "/v2/customer/shops/2cb1545e-2686-4236-aa0b-5a02b61441bb",
+#     "status": 201
+# }
+#     shop_id = "2cb1545e-2686-4236-aa0b-5a02b61441bb"
+#     return result_post_shop, shop_id
+#
+# print(new_shop()[0])
 
-print(new_shop()[0])
+json_for_put_warehouse = {
+            "name": f'Test Warehouse PUT',
+            "pickup": True,
+            "comment": "Проверка метода PUT",
+            "address": {
+                "raw": "125009 г Москва, ул Тверская, д 22/2 корп 1"
+            },
+            "contact": {
+                "fullName": "Складов Скад Складович",
+                "email": f'Testsklad@mail.ru',
+                "phone": f"+79"
+            }
+        }
 
+print(json_for_put_warehouse['contact']['fullName'])

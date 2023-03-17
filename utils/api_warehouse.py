@@ -64,9 +64,9 @@ class WarehouseApi:
     """Метод для редактирования полей склада"""
 
     @staticmethod
-    def patch_warehouse(shop_id, headers):
+    def patch_warehouse(warehouse_id, headers):
 
-        json_for_patch_shop = [
+        json_for_patch_warehouse = [
             {
                 "op": "replace",
                 "path": "visibility",
@@ -74,9 +74,9 @@ class WarehouseApi:
             }
         ]
 
-        patch_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
+        patch_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
         # print(patch_url)
-        result_patch_shop = HttpMethods.patch(patch_url, json_for_patch_shop, headers)
+        result_patch_shop = HttpMethods.patch(patch_url, json_for_patch_warehouse, headers)
         return result_patch_shop
 
     """Метод для удаления склада"""
@@ -89,7 +89,7 @@ class WarehouseApi:
         # print(result_delete_shop)
         return result_delete_shop
 
-    """Метод для добавления в отчет метода POST"""
+    """Метод добавления в отчет метода POST"""
 
     @staticmethod
     def report_post():

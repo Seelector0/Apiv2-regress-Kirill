@@ -53,7 +53,14 @@ class Checking:
             assert check_info == expected_value, \
                 f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
                 f"Ожидаемое: {expected_value}"
-            # print(f'Ожидаемое значение {expected_value} присутствуют')
+
+    @staticmethod
+    def check_json_value1(key_name, response_value, expected_value):
+        with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
+            assert response_value == expected_value, \
+                f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {response_value}. " \
+                f"Ожидаемое: {expected_value}"
+
 
     """Метод для проверки по регулярному выражению, выбираем определенное значение с помощью regexp и сравниваем"""
 

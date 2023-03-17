@@ -8,7 +8,7 @@ from utils.clear_db import clear_db
 
 @allure.description("Тестирование магазина")
 def test_flow_int_shop(shop, access_token):
-    print(f'\nСоздание магазина POST')
+    """Создание магазина POST"""
     ShopApi.report_post()
     result_post_shop = shop[0]
     Checking.check_status_code(result=result_post_shop, status_code=201)
@@ -18,49 +18,48 @@ def test_flow_int_shop(shop, access_token):
     Checking.check_json_search_regexp_in_value(result=result_post_shop.json().get('url'), check_value=shop[1],
                                                regexp_pattern=r'\/shops\/(.+)$')
 
-    print("Получение магазина GET")
-    result_get_shop = ShopApi.get_shop(shop[1], headers=access_token)
-    Checking.check_status_code(result_get_shop, 200)
-    Checking.check_json_required_keys(result_get_shop,
-                                      ['id', 'number', 'name', 'uri', 'phone', 'sender', 'trackingTag', 'visibility'])
+    """Получение магазина GET"""
+    result_get_shop = ShopApi.get_shop(shop_id=shop[1], headers=access_token)
+    Checking.check_status_code(result=result_get_shop, status_code=200)
+    Checking.check_json_required_keys(result=result_get_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
+                                                                            'sender', 'trackingTag', 'visibility'])
     Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop[1])
     Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
 
-    print("Получение списка магазинов GET")
-    result_get_all_shops = ShopApi.get_shop_all(access_token)
-    Checking.check_status_code(result_get_all_shops, 200)
+    """Получение списка магазинов GET"""
+    result_get_all_shops = ShopApi.get_shop_all(headers=access_token)
+    Checking.check_status_code(result=result_get_all_shops, status_code=200)
     Checking.check_json_required_keys_array(result=result_get_all_shops, required_key=['id', 'number', 'name', 'uri',
                                                                                        'phone', 'sender', 'trackingTag',
                                                                                        'visibility'])
 
-    print("Обновление магазина PUT")
-    result_put_shop = ShopApi.put_shop(shop[1], access_token)
-    Checking.check_status_code(result_put_shop, 204)
+    """Обновление магазина PUT"""
+    result_put_shop = ShopApi.put_shop(shop_id=shop[1], headers=access_token)
+    Checking.check_status_code(result=result_put_shop, status_code=204)
 
-    print("Редактирование полей магазина PATCH")
-    result_patch_shop = ShopApi.patch_shop(shop[1], access_token)
-    Checking.check_status_code(result_patch_shop, 200)
+    """Редактирование полей магазина PATCH"""
+    result_patch_shop = ShopApi.patch_shop(shop_id=shop[1], headers=access_token)
+    Checking.check_status_code(result=result_patch_shop, status_code=200)
     Checking.check_json_required_keys(result=result_patch_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
                                                                               'sender', 'trackingTag',
                                                                               'visibility'])
     Checking.check_json_value(result=result_patch_shop, key_name='visibility', expected_value=False)
 
-    print("Удаление магазина DELETE")
-    result_delete_shop = ShopApi.delete_shop(shop[1], access_token)
-    Checking.check_status_code(result_delete_shop, 409)
+    """Удаление магазина DELETE"""
+    result_delete_shop = ShopApi.delete_shop(shop_id=shop[1], headers=access_token)
+    Checking.check_status_code(result=result_delete_shop, status_code=409)
 
-    print("Получение магазина GET")
-    result_get_shop = ShopApi.get_shop(shop[1], access_token)
-    Checking.check_status_code(result_get_shop, 200)
+    """Получение магазина GET"""
+    result_get_shop = ShopApi.get_shop(shop_id=shop[1], headers=access_token)
+    Checking.check_status_code(result=result_get_shop, status_code=200)
     Checking.check_json_required_keys(result=result_get_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
                                                                             'sender', 'trackingTag', 'visibility'])
     Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop[1])
     Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=False)
-    print(shop[1])
 
 
 def test_flow_warehouse(warehouse, access_token):
-    print(f'\nСоздание склада POST')
+    """Создание склада POST"""
     WarehouseApi.report_post()
     result_post_warehouse = warehouse[0]
     Checking.check_status_code(result=result_post_warehouse, status_code=201)
@@ -71,9 +70,9 @@ def test_flow_warehouse(warehouse, access_token):
                                                check_value=warehouse[1],
                                                regexp_pattern=r'\/warehouses\/(.+)$')
 
-    print("Получение склада GET")
-    result_get_warehouse = WarehouseApi.get_warehouse(warehouse[1], headers=access_token)
-    Checking.check_status_code(result_get_warehouse, 200)
+    """Получение склада GET"""
+    result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse[1], headers=access_token)
+    Checking.check_status_code(result=result_get_warehouse, status_code=200)
     Checking.check_json_required_keys(result=result_get_warehouse, required_key=['id', 'number', 'name', 'visibility',
                                                                                  'address', 'contact', 'workingTime',
                                                                                  'pickup', 'dpdPickupNum', 'comment'])
@@ -81,14 +80,40 @@ def test_flow_warehouse(warehouse, access_token):
     Checking.check_json_value(result=result_get_warehouse, key_name='visibility', expected_value=True)
     Checking.check_json_search_regexp_in_value(result=result_get_warehouse.json().get('name'),
                                                check_value="Test Warehouse", regexp_pattern=r'(Test Warehouse).+$')
-    print("Получение списка складов GET")
-    result_get_all_warehouses = WarehouseApi.get_warehouse_all(access_token)
-    Checking.check_status_code(result_get_all_warehouses, 200)
+    """Получение списка складов GET"""
+    result_get_all_warehouses = WarehouseApi.get_warehouse_all(headers=access_token)
+    Checking.check_status_code(result=result_get_all_warehouses, status_code=200)
     Checking.check_json_required_keys_array(result=result_get_all_warehouses, required_key=['id', 'number', 'name',
                                                                                             'visibility', 'address',
                                                                                             'contact', 'workingTime',
                                                                                             'pickup', 'dpdPickupNum',
                                                                                             'comment'])
-    print("Обновление склада PUT")
-    result_put_warehouse = WarehouseApi.put_warehouse(warehouse[1], access_token)
-    Checking.check_status_code(result_put_warehouse, 204)
+    """Обновление склада PUT"""
+    result_put_warehouse = WarehouseApi.put_warehouse(warehouse_id=warehouse[1], headers=access_token)
+    Checking.check_status_code(result=result_put_warehouse, status_code=204)
+
+    """Редактирование полей магазина PATCH"""
+    result_patch_warehouse = WarehouseApi.patch_warehouse(warehouse_id=warehouse[1], headers=access_token)
+    Checking.check_status_code(result=result_patch_warehouse, status_code=200)
+    Checking.check_json_required_keys(result=result_patch_warehouse, required_key=['id', 'number', 'name', 'visibility',
+                                                                                   'address', 'contact', 'workingTime',
+                                                                                   'pickup', 'dpdPickupNum', 'comment'])
+    Checking.check_json_value(result=result_patch_warehouse, key_name='visibility', expected_value=False)
+
+    """Получение магазина GET"""
+    result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse[1], headers=access_token)
+    Checking.check_status_code(result=result_get_warehouse, status_code=200)
+    Checking.check_json_required_keys(result=result_get_warehouse, required_key=['id', 'number', 'name', 'visibility',
+                                                                                 'address', 'contact', 'workingTime',
+                                                                                 'pickup', 'dpdPickupNum', 'comment'])
+    Checking.check_json_value(result=result_get_warehouse, key_name='id', expected_value=warehouse[1])
+    Checking.check_json_value(result=result_get_warehouse, key_name='visibility', expected_value=False)
+    Checking.check_json_value(result=result_get_warehouse, key_name='pickup', expected_value=True)
+    print(result_get_warehouse.json()["contact"]["fullName"])
+    Checking.check_json_value1(key_name="fullName", response_value=result_get_warehouse.json()["contact"]["fullName"], expected_value="Складов Скад Складович")
+    Checking.check_json_search_regexp_in_value(result=result_get_warehouse.json().get('name'),
+                                               check_value="Test Warehouse PUT", regexp_pattern=r'(Test Warehouse PUT).+$')
+
+
+
+# clear_db(shop_id=f"'{shop_id}'", warehouse_id=f"'{warehouse_id}'")
