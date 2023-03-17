@@ -54,11 +54,20 @@ class Checking:
                 f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
                 f"Ожидаемое: {expected_value}"
 
+    # @staticmethod
+    # def check_json_value1(key_name, response_value, expected_value):
+    #     with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
+    #         assert response_value == expected_value, \
+    #             f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {response_value}. " \
+    #             f"Ожидаемое: {expected_value}"
+
     @staticmethod
-    def check_json_value1(key_name, response_value, expected_value):
-        with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
-            assert response_value == expected_value, \
-                f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {response_value}. " \
+    def check_json_value2(result, key_name_1, key_name_2, expected_value):
+        with allure.step(f"В ключе {key_name_2} верное ожидаемое значение {expected_value}"):
+            check = result.json()
+            check_info = check.get(key_name_1, {}).get(key_name_2)
+            assert check_info == expected_value, \
+                f"Ожидаемое значение в ключе {key_name_2} не верное! Фактическое: {check_info}. " \
                 f"Ожидаемое: {expected_value}"
 
 

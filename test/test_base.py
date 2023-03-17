@@ -110,7 +110,9 @@ def test_flow_warehouse(warehouse, access_token):
     Checking.check_json_value(result=result_get_warehouse, key_name='visibility', expected_value=False)
     Checking.check_json_value(result=result_get_warehouse, key_name='pickup', expected_value=True)
     print(result_get_warehouse.json()["contact"]["fullName"])
-    Checking.check_json_value1(key_name="fullName", response_value=result_get_warehouse.json()["contact"]["fullName"], expected_value="Складов Скад Складович")
+    # Checking.check_json_value1(key_name="fullName", response_value=result_get_warehouse.json()["contact"]["fullName"], expected_value="Складов Скад Складович")
+    Checking.check_json_value2(result=result_get_warehouse, key_name_1='contact', key_name_2='fullName',
+                               expected_value="Складов Скад Складович")
     Checking.check_json_search_regexp_in_value(result=result_get_warehouse.json().get('name'),
                                                check_value="Test Warehouse PUT", regexp_pattern=r'(Test Warehouse PUT).+$')
 

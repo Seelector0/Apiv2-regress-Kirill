@@ -140,3 +140,7 @@ json_for_put_warehouse = {
         }
 
 print(json_for_put_warehouse['contact']['fullName'])
+print(json_for_put_warehouse.get('contact', {}).get('fullName'))
+
+
+# res = test_dict.get('Gfg', {}).get('is')
