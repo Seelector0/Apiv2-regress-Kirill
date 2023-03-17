@@ -1,4 +1,7 @@
 import datetime
+
+import allure
+
 from utils.http_method import HttpMethods
 from environment import Env
 from random import randint
@@ -85,3 +88,8 @@ class ParcelApi:
         result_delete_shop = HttpMethods.delete(delete_url, headers)
         # print(result_delete_shop)
         return result_delete_shop
+
+    @staticmethod
+    def report_post():
+        with allure.step(f"Метод POST {Env.URL}/v2/parcels"):
+            return None

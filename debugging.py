@@ -93,22 +93,35 @@ import re
 # clear_db(shop_id=shop_id)
 
 
-def new_parcel():
-    listt = []
-    result_post_parcel = [
-        {
-            "id": "c3a1f637-e149-4e80-9a20-78bfc6e83461",
-            "type": "Parcel",
-            "url": "/v2/parcels/c3a1f637-e149-4e80-9a20-78bfc6e83461",
-            "status": 201
-        }
-    ]
-    for parcel_id in result_post_parcel:
-        listt.append(parcel_id["type"])
-    return listt
+# def new_parcel():
+#     listt = []
+#     result_post_parcel = [
+#         {
+#             "id": "c3a1f637-e149-4e80-9a20-78bfc6e83461",
+#             "type": "Parcel",
+#             "url": "/v2/parcels/c3a1f637-e149-4e80-9a20-78bfc6e83461",
+#             "status": 201
+#         }
+#     ]
+#     for parcel_id in result_post_parcel:
+#         listt.append(parcel_id["type"])
+#     return listt
+#
+#
+# # for array in result.json():
+# #     assert all(key in array for key in required_key)
+#
+# print(new_parcel())
 
+def new_shop():
+    result_post_shop = {
+    "id": "2cb1545e-2686-4236-aa0b-5a02b61441bb",
+    "type": "Shop",
+    "url": "/v2/customer/shops/2cb1545e-2686-4236-aa0b-5a02b61441bb",
+    "status": 201
+}
+    shop_id = "2cb1545e-2686-4236-aa0b-5a02b61441bb"
+    return result_post_shop, shop_id
 
-# for array in result.json():
-#     assert all(key in array for key in required_key)
+print(new_shop()[0])
 
-print(new_parcel())
