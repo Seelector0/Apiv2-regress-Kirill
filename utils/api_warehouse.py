@@ -3,14 +3,13 @@ from utils.http_method import HttpMethods
 from environment import Env
 from random import randint
 
-"""Методы для тестирования магазина"""
-
 
 class WarehouseApi:
-    """Метод для создания склада"""
+    """Методы для работы со складом"""
 
     @staticmethod
     def create_warehouse(headers):
+        """Метод для создания склада"""
         json_for_create_new_warehouse = {
             "name": f'Test Warehouse {datetime.datetime.now()}',
             "address": {
@@ -21,26 +20,23 @@ class WarehouseApi:
         result_post_shop = HttpMethods.post(post_url, json_for_create_new_warehouse, headers)
         return result_post_shop
 
-    """Метод для проверки всех складов"""
-
     @staticmethod
     def get_warehouse_all(headers):
+        """Метод для проверки всех складов"""
         get_url = f'{Env.URL}/v2/customer/warehouses'
         result_get_warehouse_all = HttpMethods.get(get_url, headers)
         return result_get_warehouse_all
 
-    """Метод для проверки склада"""
-
     @staticmethod
     def get_warehouse(warehouse_id, headers):
+        """Метод для проверки склада"""
         get_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
         result_get_warehouse = HttpMethods.get(get_url, headers)
         return result_get_warehouse
 
-    """Метод для обновления склада"""
-
     @staticmethod
     def put_warehouse(warehouse_id, headers):
+        """Метод для обновления склада"""
         json_for_put_warehouse = {
             "name": f'Test Warehouse PUT {datetime.datetime.now()}',
             "pickup": True,
@@ -58,30 +54,23 @@ class WarehouseApi:
         result_put_warehouse = HttpMethods.put(put_url, json_for_put_warehouse, headers)
         return result_put_warehouse
 
-    """Метод для редактирования полей склада"""
-
     @staticmethod
-    def patch_warehouse(shop_id, headers):
-
-        json_for_patch_shop = [
+    def patch_warehouse(warehouse_id, headers):
+        """Метод для редактирования полей склада"""
+        json_for_patch_warehouse = [
             {
                 "op": "replace",
                 "path": "visibility",
                 "value": False
             }
         ]
-
-        patch_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
-        # print(patch_url)
-        result_patch_shop = HttpMethods.patch(patch_url, json_for_patch_shop, headers)
-        return result_patch_shop
-
-    """Метод для удаления склада"""
+        patch_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
+        result_patch_warehouse = HttpMethods.patch(patch_url, json_for_patch_warehouse, headers)
+        return result_patch_warehouse
 
     @staticmethod
-    def delete_warehouse(shop_id, headers):
-        delete_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
-        # print(delete_url)
-        result_delete_shop = HttpMethods.delete(delete_url, headers)
-        # print(result_delete_shop)
-        return result_delete_shop
+    def delete_warehouse(warehouse_id, headers):
+        """Метод для удаления склада"""
+        delete_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
+        result_delete_warehouse = HttpMethods.delete(delete_url, headers)
+        return result_delete_warehouse

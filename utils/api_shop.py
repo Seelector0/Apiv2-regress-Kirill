@@ -1,53 +1,41 @@
-import datetime
 from utils.http_method import HttpMethods
 from environment import Env
 from random import randint
-
-"""Методы для тестирования магазина"""
+import datetime
 
 
 class ShopApi:
-    """Метод для создания магазина"""
+    """Методы для работы с магазином"""
 
     @staticmethod
     def create_shop(headers):
-
+        """Метод для создания магазина"""
         json_for_create_new_shop = {
             "name": f'Shop Int {datetime.datetime.now()}',
             "uri": f'bestshop{randint(100, 9999)}.ru'
         }
 
         post_url = f'{Env.URL}/v2/customer/shops'
-        # print(post_url)
-        result_post_shop = HttpMethods.post(post_url, json_for_create_new_shop, headers)
-        # print(result_post_shop.text)
+        result_post_shop = HttpMethods.post(url=post_url, body=json_for_create_new_shop, headers=headers)
         return result_post_shop
-
-    """Метод для проверки всех магазинов"""
 
     @staticmethod
     def get_shop_all(headers):
+        """Метод для проверки всех магазинов"""
         get_url = f'{Env.URL}/v2/customer/shops'
-        # print(get_url)
-        result_get_shop_all = HttpMethods.get(get_url, headers)
-        # print(result_get_shop_all.text)
+        result_get_shop_all = HttpMethods.get(url=get_url, headers=headers)
         return result_get_shop_all
-
-    """Метод для проверки магазина"""
 
     @staticmethod
     def get_shop(shop_id, headers):
+        """Метод для проверки магазина"""
         get_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
-        # print(get_url)
-        result_get_shop = HttpMethods.get(get_url, headers)
-        # print(result_get_shop.text)
+        result_get_shop = HttpMethods.get(url=get_url, headers=headers)
         return result_get_shop
-
-    """Метод для обновления магазина"""
 
     @staticmethod
     def put_shop(shop_id, headers):
-
+        """Метод для обновления магазина"""
         json_for_put_shop = {
             "name": f'Shop Int PUT {datetime.datetime.now()}',
             "uri": f'bestshop{randint(100, 9999)}.ru',
@@ -56,34 +44,37 @@ class ShopApi:
         }
 
         put_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
-        # print(put_url)
-        result_put_shop = HttpMethods.put(put_url, json_for_put_shop, headers)
+        result_put_shop = HttpMethods.put(url=put_url, body=json_for_put_shop, headers=headers)
         return result_put_shop
-
-    """Метод для редактирования полей магазина"""
 
     @staticmethod
     def patch_shop(shop_id, headers):
-
+        """Метод для редактирования полей магазина"""
         json_for_patch_shop = [
             {
                 "op": "replace",
                 "path": "visibility",
-                "value": False
+                "value": True
             }
         ]
 
         patch_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
-        # print(patch_url)
-        result_patch_shop = HttpMethods.patch(patch_url, json_for_patch_shop, headers)
+        result_patch_shop = HttpMethods.patch(url=patch_url, body=json_for_patch_shop, headers=headers)
         return result_patch_shop
-
-    """Метод для удаления магазина"""
 
     @staticmethod
     def delete_shop(shop_id, headers):
+        """Метод для удаления магазина"""
         delete_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
-        # print(delete_url)
-        result_delete_shop = HttpMethods.delete(delete_url, headers)
-        # print(result_delete_shop)
+        result_delete_shop = HttpMethods.delete(url=delete_url, headers=headers)
         return result_delete_shop
+
+    @staticmethod
+    def get_shops_id(headers):
+        """Метод получения id магазинов"""
+        get_url = f'{Env.URL}/v2/customer/shops'
+        shops_list = HttpMethods.get_not_allure(url=get_url, headers=headers)
+        shops_id_list = []
+        for shop in shops_list.json():
+            shops_id_list += shop.get('id').split()
+        return shops_id_list

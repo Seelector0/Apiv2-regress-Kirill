@@ -1,7 +1,6 @@
-import psycopg2
 from psycopg2 import Error
-
 from environment import Env
+import psycopg2
 
 
 def clear_db(shop_id='null', warehouse_id='null'):

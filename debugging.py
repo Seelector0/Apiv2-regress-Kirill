@@ -43,7 +43,6 @@ import re
 #                                                                     check_value=self.WAREHOUSE_ID)
 
 
-
 #
 # result = re.search('(\/v2\/customer\/warehouses\/)(.+)$', '/v2/customer/warehouses/4932d0ca-096c-4464-8fb8-eef509d9f86b')
 # print(result)
@@ -91,3 +90,44 @@ import re
 # # warehouse_id = f"'25281a75-15f1-451b-baeb-46ca6eb7c7cc'"
 #
 # clear_db(shop_id=shop_id)
+
+res = [
+    {
+        "id": "dd16b98c-94aa-441d-b1ef-c56c16f550ff",
+        "number": "SH-44722",
+        "name": "Shop Int PUT 2023-03-20 22:33:30.517822",
+        "uri": "bestshop1173.ru",
+        "phone": "79733769735",
+        "sender": "Тестов Тест Тестович",
+        "trackingTag": "7GGb",
+        "visibility": 33
+    },
+    {
+        "id": "36d219dd-4071-4b91-9969-15d2b6ae6638",
+        "number": "SH-20220",
+        "name": "Shop Int PUT 2023-03-20 22:33:40.286391",
+        "uri": "bestshop5848.ru",
+        "phone": "79694960238",
+        "sender": "Тестов Тест Тестович",
+        "trackingTag": "QyyR",
+        "visibility": 33
+    },
+    {
+        "id": "36d219dd-4071-4b91-9969-15d2b6ae6777",
+        "number": "SH-20220",
+        "name": "Shop Int PUT 2023-03-20 22:33:40.286391",
+        "uri": "bestshop5848.ru",
+        "phone": "79694960238",
+        "sender": "Тестов Тест Тестович",
+        "trackingTag": "QyyR",
+        "visibility": 33
+    }
+]
+# res_id = []
+# for shop in res:
+#     res_id.append(shop["id"])
+# print(res)
+shop_id = []
+for array in res:
+    shop_id += array.get('id').split()
+print(shop_id)

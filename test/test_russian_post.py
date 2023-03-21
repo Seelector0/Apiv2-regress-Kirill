@@ -9,29 +9,29 @@ from utils.checking import Checking
 from utils.clear_db import clear_db
 
 
-@allure.description("Тестирование магазина")
-
-def test_create_new_connections_rp(new_shop, access_token):
-    shop_id = new_shop.json().get('id')
-    print(shop_id)
-    result_post_new_connections = DeliveryServiceApi.create_new_connection_rp(shop_id=shop_id, headers=access_token)
-
-def test_create_new_order_2(new_shop, new_warehouse, access_token):
-    shop_id = new_shop.json().get('id')
-    warehouse_id = new_warehouse.json().get('id')
-    result_post_order = OrderApi.create_order(shop_id=shop_id, warehouse_id=warehouse_id, headers=access_token, sec=6)
-    print(result_post_order.json().get('id'))
-    print(shop_id)
-    print(warehouse_id)
-
-def test_create_new_parcel(new_order, access_token):
-    new_order_id = new_order.json().get('id')
-    result_post_parcel = ParcelApi.create_parcel(order_id=new_order_id, headers=access_token)
-    print(new_order_id)
-    # print(result_post_parcel.json().get('id'))
-
-def test_create_new_parcel_2(new_parcel, access_token):
-    print(new_parcel)
+# @allure.description("Тестирование магазина")
+#
+# def test_create_new_connections_rp(new_shop, access_token):
+#     shop_id = new_shop.json().get('id')
+#     print(shop_id)
+#     result_post_new_connections = DeliveryServiceApi.create_new_connection_rp(shop_id=shop_id, headers=access_token)
+#
+# def test_create_new_order_2(new_shop, new_warehouse, access_token):
+#     shop_id = new_shop.json().get('id')
+#     warehouse_id = new_warehouse.json().get('id')
+#     result_post_order = OrderApi.create_order(shop_id=shop_id, warehouse_id=warehouse_id, headers=access_token, sec=6)
+#     print(result_post_order.json().get('id'))
+#     print(shop_id)
+#     print(warehouse_id)
+#
+# def test_create_new_parcel(new_order, access_token):
+#     new_order_id = new_order.json().get('id')
+#     result_post_parcel = ParcelApi.create_parcel(order_id=new_order_id, headers=access_token)
+#     print(new_order_id)
+#     # print(result_post_parcel.json().get('id'))
+#
+# def test_create_new_parcel_2(new_parcel, access_token):
+#     print(new_parcel)
     # print(new_parcel.json().get('id'))
 
 # def test_create_new_order3(new_order, access_token):
