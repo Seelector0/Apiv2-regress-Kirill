@@ -8,7 +8,7 @@ class ShopApi:
     """Методы для работы с магазином"""
 
     @staticmethod
-    def create_shop(headers):
+    def create_shop(headers: str):
         """Метод для создания магазина"""
         json_for_create_new_shop = {
             "name": f'Shop Int {datetime.datetime.now()}',
@@ -20,21 +20,21 @@ class ShopApi:
         return result_post_shop
 
     @staticmethod
-    def get_shop_all(headers):
+    def get_shop_all(headers: str):
         """Метод для проверки всех магазинов"""
         get_url = f'{Env.URL}/v2/customer/shops'
         result_get_shop_all = HttpMethods.get(url=get_url, headers=headers)
         return result_get_shop_all
 
     @staticmethod
-    def get_shop(shop_id, headers):
+    def get_shop(shop_id: str, headers: str):
         """Метод для проверки магазина"""
         get_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
         result_get_shop = HttpMethods.get(url=get_url, headers=headers)
         return result_get_shop
 
     @staticmethod
-    def put_shop(shop_id, headers):
+    def put_shop(shop_id: str, headers: str):
         """Метод для обновления магазина"""
         json_for_put_shop = {
             "name": f'Shop Int PUT {datetime.datetime.now()}',
@@ -48,7 +48,7 @@ class ShopApi:
         return result_put_shop
 
     @staticmethod
-    def patch_shop(shop_id, headers):
+    def patch_shop(shop_id: str, headers: str):
         """Метод для редактирования полей магазина"""
         json_for_patch_shop = [
             {
@@ -63,14 +63,14 @@ class ShopApi:
         return result_patch_shop
 
     @staticmethod
-    def delete_shop(shop_id, headers):
+    def delete_shop(shop_id: str, headers: str):
         """Метод для удаления магазина"""
         delete_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
         result_delete_shop = HttpMethods.delete(url=delete_url, headers=headers)
         return result_delete_shop
 
     @staticmethod
-    def get_shops_id(headers):
+    def get_shops_id(headers: str):
         """Метод получения id магазинов"""
         get_url = f'{Env.URL}/v2/customer/shops'
         shops_list = HttpMethods.get_not_allure(url=get_url, headers=headers)

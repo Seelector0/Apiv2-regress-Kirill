@@ -8,7 +8,7 @@ class WarehouseApi:
     """Методы для работы со складом"""
 
     @staticmethod
-    def create_warehouse(headers):
+    def create_warehouse(headers: str):
         """Метод для создания склада"""
         json_for_create_new_warehouse = {
             "name": f'Test Warehouse {datetime.datetime.now()}',
@@ -21,21 +21,21 @@ class WarehouseApi:
         return result_post_shop
 
     @staticmethod
-    def get_warehouse_all(headers):
+    def get_warehouse_all(headers: str):
         """Метод для проверки всех складов"""
         get_url = f'{Env.URL}/v2/customer/warehouses'
         result_get_warehouse_all = HttpMethods.get(get_url, headers)
         return result_get_warehouse_all
 
     @staticmethod
-    def get_warehouse(warehouse_id, headers):
+    def get_warehouse(warehouse_id: str, headers: str):
         """Метод для проверки склада"""
         get_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
         result_get_warehouse = HttpMethods.get(get_url, headers)
         return result_get_warehouse
 
     @staticmethod
-    def put_warehouse(warehouse_id, headers):
+    def put_warehouse(warehouse_id: str, headers: str):
         """Метод для обновления склада"""
         json_for_put_warehouse = {
             "name": f'Test Warehouse PUT {datetime.datetime.now()}',
@@ -55,7 +55,7 @@ class WarehouseApi:
         return result_put_warehouse
 
     @staticmethod
-    def patch_warehouse(warehouse_id, headers):
+    def patch_warehouse(warehouse_id: str, headers: str):
         """Метод для редактирования полей склада"""
         json_for_patch_warehouse = [
             {
@@ -69,7 +69,7 @@ class WarehouseApi:
         return result_patch_warehouse
 
     @staticmethod
-    def delete_warehouse(warehouse_id, headers):
+    def delete_warehouse(warehouse_id: str, headers: str):
         """Метод для удаления склада"""
         delete_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
         result_delete_warehouse = HttpMethods.delete(delete_url, headers)
