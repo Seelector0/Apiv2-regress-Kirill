@@ -9,13 +9,21 @@ from utils.checking import Checking
 from utils.clear_db import clear_db
 
 
-# @allure.description("Тестирование магазина")
-#
-# def test_create_new_connections_rp(new_shop, access_token):
-#     shop_id = new_shop.json().get('id')
-#     print(shop_id)
-#     result_post_new_connections = DeliveryServiceApi.create_new_connection_rp(shop_id=shop_id, headers=access_token)
-#
+@allure.description("Тестирование подключения Почты России")
+def test_connection(shop, access_token):
+    result_post_connections = DeliveryServiceApi.delivery_service_russian_post(shop_id=shop[1], headers=access_token)
+    Checking.check_status_code(result=result_post_connections, status_code=201)
+    Checking.check_json_required_keys(result=result_post_connections, required_key=['id', 'type', 'url', 'status'])
+    Checking.check_json_value(result=result_post_connections, key_name='type', expected_value='Delivery')
+    Checking.check_json_value(result=result_post_connections, key_name='status', expected_value=201)
+    Checking.check_json_search_regexp_in_value(result=result_post_connections.json().get('url'),
+                                               check_value=shop[1],
+                                               regexp_pattern=r'\/shops\/(.+)\/delivery_services\/.*')
+
+
+
+
+
 # def test_create_new_order_2(new_shop, new_warehouse, access_token):
 #     shop_id = new_shop.json().get('id')
 #     warehouse_id = new_warehouse.json().get('id')
@@ -32,14 +40,11 @@ from utils.clear_db import clear_db
 #
 # def test_create_new_parcel_2(new_parcel, access_token):
 #     print(new_parcel)
-    # print(new_parcel.json().get('id'))
-
+#     print(new_parcel.json().get('id'))
+#
 # def test_create_new_order3(new_order, access_token):
 #     print(new_order)
 #     print(new_order.json().get('id'))
-
-
-
 
 
 # def test_create_new_order(new_order, access_token):
@@ -54,7 +59,6 @@ from utils.clear_db import clear_db
 #     # print(warehouse_id)
 #     # print(shop_id)
 #     # clear_db(shop_id=f"'{shop_id}'", warehouse_id=f"'{warehouse_id}'")
-
 
 
 # def test_create_new_order3(new_order, access_token):

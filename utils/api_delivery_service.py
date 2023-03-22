@@ -1,17 +1,14 @@
-import datetime
 from utils.http_method import HttpMethods
 from environment import Env
-from random import randint
-
-"""Методы для тестирования магазина"""
 
 
 class DeliveryServiceApi:
-    """Метод для создания склада"""
+    """Методы для подключения служб доставки"""
 
     @staticmethod
-    def create_new_connection_rp(headers, shop_id):
-        json_for_create_new_connection_rp = {
+    def delivery_service_russian_post(shop_id: str, headers: str):
+        """Подключение Почты России"""
+        json_delivery_service_russian_post = {
             "deliveryServiceCode": "RussianPost",
             "data": {
                 "token": "A_DlNhO2HJGXf2mx5qPyA9Z2qDiqQoiE",
@@ -22,69 +19,59 @@ class DeliveryServiceApi:
             }
         }
         post_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services'
-        result_post_shop = HttpMethods.post(post_url, json_for_create_new_connection_rp, headers)
-        return result_post_shop
-
-    """Метод для проверки всех складов"""
+        delivery_service_russian_post = HttpMethods.post(post_url, json_delivery_service_russian_post, headers)
+        return delivery_service_russian_post
 
     @staticmethod
-    def get_warehouse_all(headers):
-        get_url = f'{Env.URL}/v2/customer/warehouses'
-        result_get_warehouse_all = HttpMethods.get(get_url, headers)
-        return result_get_warehouse_all
-
-    """Метод для проверки склада"""
-
-    @staticmethod
-    def get_warehouse(warehouse_id, headers):
-        get_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
-        result_get_warehouse = HttpMethods.get(get_url, headers)
-        return result_get_warehouse
-
-    """Метод для обновления склада"""
+    def get_delivery_service(shop_id: str, headers: str):
+        """Метод для получения настроек по всем службам доставки"""
+        get_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services'
+        result_get_delivery_service = HttpMethods.get(get_url, headers)
+        return result_get_delivery_service
 
     @staticmethod
-    def put_warehouse(warehouse_id, headers):
-        json_for_put_warehouse = {
-            "name": f'Test Warehouse PUT {datetime.datetime.now()}',
-            "pickup": True,
-            "comment": "Проверка метода PUT",
-            "address": {
-                "raw": "125009 г Москва, ул Тверская, д 22/2 корп 1"
-            },
-            "contact": {
-                "fullName": "Складов Скад Складович",
-                "email": f'Testsklad{randint(100, 9999)}@mail.ru',
-                "phone": f"+79{randint(100000000, 999999999)}"
-            }
-        }
-        put_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
-        result_put_warehouse = HttpMethods.put(put_url, json_for_put_warehouse, headers)
-        return result_put_warehouse
-
-    """Метод для редактирования полей склада"""
+    def get_delivery_service_code(shop_id: str, code: str, headers: str):
+        """Метод для получения настроек по конкретной службе доставки"""
+        get_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services/{code}'
+        result_get_delivery_service_code = HttpMethods.get(get_url, headers)
+        return result_get_delivery_service_code
 
     @staticmethod
-    def patch_warehouse(shop_id, headers):
-        json_for_patch_shop = [
+    def patch_delivery_service_code(shop_id: str, code: str, headers: str):
+        """Метод для редактирования настроек службы доставки"""
+        json_for_patch_delivery_service = [
             {
                 "op": "replace",
                 "path": "visibility",
                 "value": False
+            },
+            {
+                "op": "replace",
+                "path": "settings.tariffs",
+                "value": {
+                    "exclude": [
+                        "14",
+                        "25"
+                    ],
+                    "restrict": None
+                }
             }
         ]
-
-        patch_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
-        # print(patch_url)
-        result_patch_shop = HttpMethods.patch(patch_url, json_for_patch_shop, headers)
-        return result_patch_shop
-
-    """Метод для удаления склада"""
+        patch_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services/{code}'
+        result_patch_delivery_service_code = HttpMethods.patch(url=patch_url, body=json_for_patch_delivery_service,
+                                                               headers=headers)
+        return result_patch_delivery_service_code
 
     @staticmethod
-    def delete_warehouse(shop_id, headers):
-        delete_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
-        # print(delete_url)
-        result_delete_shop = HttpMethods.delete(delete_url, headers)
-        # print(result_delete_shop)
-        return result_delete_shop
+    def delivery_service_activate(shop_id: str, code: str, headers: str):
+        """Активация службы доставки"""
+        post_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services/{code}/activate'
+        delivery_service_activate = HttpMethods.post(url=post_url, body=None, headers=headers)
+        return delivery_service_activate
+
+    @staticmethod
+    def delivery_service_deactivate(shop_id: str, code: str, headers: str):
+        """Деактивация службы доставки"""
+        post_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services/{code}/deactivate'
+        delivery_service_deactivate = HttpMethods.post(url=post_url, body=None, headers=headers)
+        return delivery_service_deactivate

@@ -56,7 +56,7 @@ def test_flow_int_shop(access_token):
     Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop_id)
     Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
 
-
+@allure.description("Тестирование склада")
 def test_flow_warehouse(access_token):
     """Создание склада POST"""
     result_post_warehouse = WarehouseApi.create_warehouse(headers=access_token)
