@@ -10,6 +10,7 @@ import pytest
 
 @allure.description("Тестирование подключения Почты России")
 def test_new_connection(access_token, shop):
+    """Создание подключения"""
     result_post_connections = DeliveryServiceApi.delivery_service_russian_post(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_post_connections, status_code=201)
     Checking.check_json_required_keys(result=result_post_connections, required_key=['id', 'type', 'url', 'status'])
@@ -19,16 +20,37 @@ def test_new_connection(access_token, shop):
                                                check_value=shop[1],
                                                regexp_pattern=r'\/shops\/(.+)\/delivery_services\/.*')
 
+    """Получение настроек службы доставки Почта России"""
+    result_get_connections = DeliveryServiceApi.get_delivery_service_code(shop_id=shop[1], headers=access_token,
+                                                                          code='RussianPost')
+    Checking.check_status_code(result=result_get_connections, status_code=200)
+    Checking.check_json_required_keys(result=result_get_connections, required_key=['code', 'name', 'hasAggregation',
+                                                                                   'credentials'])
+    Checking.check_json_value(result=result_get_connections, key_name='code', expected_value='RussianPost')
+    Checking.check_json_value(result=result_get_connections, key_name='name', expected_value='Почта России')
+    Checking.check_json_value(result=result_get_connections, key_name='hasAggregation', expected_value=True)
+    Checking.check_json_value_array_level_3(result=result_get_connections, key_level_1='credentials',
+                                            key_level_2='data', key_name_3='type', expected_value="integration")
 
-@pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
-def test_create_new_order(access_token, shop, warehouse, connection, payment_type):
-    result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
-                                              payment_type=payment_type)
+    """Получение настроек всех служб доставки"""
+    result_get_all_connections = DeliveryServiceApi.get_delivery_service(shop_id=shop[1], headers=access_token)
+    Checking.check_status_code(result=result_get_all_connections, status_code=200)
+    Checking.check_json_required_keys_array(result=result_get_all_connections, required_key=['code', 'name',
+                                                                                             'hasAggregation', 'id',
+                                                                                             'active', 'visibility',
+                                                                                             'type', 'moderation'])
 
 
-def test_create_new_parcel(access_token, shop, warehouse, connection, order):
-    # time.sleep(5)
-    result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)
+# @pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
+# def test_create_new_order(access_token, shop, warehouse, connection, payment_type):
+#     result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
+#                                               payment_type=payment_type)
+#
+#
+# def test_create_new_parcel(access_token, shop, warehouse, connection, order):
+#     # time.sleep(5)
+#     result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)
+
 
 # def test_create_new_parcel_2(new_parcel, access_token):
 #     print(new_parcel)
