@@ -3,11 +3,11 @@ from environment import Env
 import pytest
 import requests
 
-from utils.api_delivery_service import DeliveryServiceApi
-from utils.api_order import OrderApi
-from utils.api_parcelr import ParcelApi
-from utils.api_shop import ShopApi
-from utils.api_warehouse import WarehouseApi
+from utils.api.api_delivery_service import DeliveryServiceApi
+from utils.api.api_order import OrderApi
+from utils.api.api_parcelr import ParcelApi
+from utils.api.api_shop import ShopApi
+from utils.api.api_warehouse import WarehouseApi
 
 
 @pytest.fixture(scope="module")

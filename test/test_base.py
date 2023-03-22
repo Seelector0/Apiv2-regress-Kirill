@@ -1,5 +1,5 @@
-from utils.api_shop import ShopApi
-from utils.api_warehouse import WarehouseApi
+from utils.api.api_shop import ShopApi
+from utils.api.api_warehouse import WarehouseApi
 from utils.checking import Checking
 from utils.clear_db import clear_db
 import allure
@@ -56,6 +56,7 @@ def test_flow_int_shop(access_token):
     Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop_id)
     Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
 
+
 @allure.description("Тестирование склада")
 def test_flow_warehouse(access_token):
     """Создание склада POST"""
@@ -108,13 +109,13 @@ def test_flow_warehouse(access_token):
     Checking.check_json_value(result=result_get_warehouse, key_name='id', expected_value=warehouse_id)
     Checking.check_json_value(result=result_get_warehouse, key_name='visibility', expected_value=False)
     Checking.check_json_value(result=result_get_warehouse, key_name='pickup', expected_value=True)
-    Checking.check_json_value_array_level_2(result=result_get_warehouse, key_level_1='contact', key_name_2='fullName',
+    Checking.check_json_value_array_level_2(result=result_get_warehouse, key_level_1='contact', key_name='fullName',
                                             expected_value="Складов Скад Складович")
     Checking.check_json_search_regexp_in_value(result=result_get_warehouse.json().get('name'),
                                                check_value="Test Warehouse PUT",
                                                regexp_pattern=r'(Test Warehouse PUT).+$')
     """Удаление склада DELETE"""
-    result_delete_shop = WarehouseApi.delete_warehouse(warehouse_id=warehouse_id,headers=access_token)
+    result_delete_shop = WarehouseApi.delete_warehouse(warehouse_id=warehouse_id, headers=access_token)
     Checking.check_status_code(result=result_delete_shop, status_code=204)
 
     """Получение склада GET"""

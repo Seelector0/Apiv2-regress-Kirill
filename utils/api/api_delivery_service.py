@@ -75,3 +75,26 @@ class DeliveryServiceApi:
         post_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services/{code}/deactivate'
         delivery_service_deactivate = HttpMethods.post(url=post_url, body=None, headers=headers)
         return delivery_service_deactivate
+
+    @staticmethod
+    def put_delivery_service(shop_id: str, code: str, headers: str):
+        """Негативная проверка: Метод для обновления службы доставки"""
+        json_for_delivery_service = {
+            "deliveryServiceCode": "RussianPost",
+            "data": {
+                "token": "A_DlNhO2HJGXf2mx5qPyA9Z2qDiqQoiE",
+                "secret": "dkBwaW1wYXkucnU6KEgpeW1beCtPRUoh",
+                "type": "integration",
+                "intakePostOfficeCode": "101000"
+            }
+        }
+        put_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services/{code}'
+        result_put_delivery_service = HttpMethods.put(url=put_url, body=json_for_delivery_service, headers=headers)
+        return result_put_delivery_service
+
+    @staticmethod
+    def delete_delivery_service(shop_id: str,  code: str, headers: str):
+        """Негативная проверка: Метод для удаления службы доставки"""
+        delete_url = f'{Env.URL}/v2/customer/shops/{shop_id}/delivery_services/{code}'
+        result_delete_delivery_service = HttpMethods.delete(url=delete_url, headers=headers)
+        return result_delete_delivery_service

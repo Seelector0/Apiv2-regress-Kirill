@@ -64,7 +64,7 @@ class ShopApi:
 
     @staticmethod
     def delete_shop(shop_id: str, headers: str):
-        """Метод для удаления магазина"""
+        """Негативная проверка: Метод для удаления магазина"""
         delete_url = f'{Env.URL}/v2/customer/shops/{shop_id}'
         result_delete_shop = HttpMethods.delete(url=delete_url, headers=headers)
         return result_delete_shop

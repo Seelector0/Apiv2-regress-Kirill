@@ -6,7 +6,7 @@ class Checking:
     """Методы для проверки запросов"""
 
     @staticmethod
-    def check_status_code(result, status_code):
+    def check_status_code(result, status_code: int):
         """Метод для проверки статус кода"""
         with allure.step(f"Статус код в ответе {status_code}"):  # добавляем отображение в allure проверки
             assert status_code == result.status_code, \
@@ -14,7 +14,7 @@ class Checking:
             # print(f'Статус код: {status_code} PASSED')
 
     @staticmethod
-    def check_json_required_keys_exact(result, required_key):
+    def check_json_required_keys_exact(result, required_key: list):
         """Метод для проверки наличия ключей в ответе запроса, обязательно указываются все ключи"""
         with allure.step(f"Обязательные ключи {required_key} присутствуют"):
             token = result.json()  # модулем json преобразуем строку в формат json result.json() json.loads(result.text)
@@ -23,7 +23,7 @@ class Checking:
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
     @staticmethod
-    def check_json_required_keys(result, required_key):
+    def check_json_required_keys(result, required_key: list):
         """Метод для проверки наличия ключей в ответе запроса, необязательно указывать все ключи"""
         with allure.step(f"Ключи {required_key} присутствуют"):
             assert all(key in result.json() for key in required_key), \
@@ -31,7 +31,7 @@ class Checking:
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
     @staticmethod
-    def check_json_required_keys_array(result, required_key):
+    def check_json_required_keys_array(result, required_key: list):
         """Метод для проверки наличия ключей в массиве, необязательно указывать все ключи"""
         with allure.step(f"Ключи {required_key} присутствуют"):
             for array in result.json():
@@ -40,7 +40,7 @@ class Checking:
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
     @staticmethod
-    def check_json_value(result, key_name, expected_value):
+    def check_json_value(result, key_name: str, expected_value):
         """Метод для проверки значения в ответе запроса"""
         with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
             check = result.json()
@@ -50,23 +50,34 @@ class Checking:
                 f"Ожидаемое: {expected_value}"
 
     @staticmethod
-    def check_json_value_array_level_2(result, key_level_1, key_name_2, expected_value):
+    def check_json_value_array_level_2(result, key_level_1: str, key_name: str, expected_value):
         """Метод для проверки значения в ответе запроса на втором уровне массива"""
-        with allure.step(f"В ключе {key_name_2} верное ожидаемое значение {expected_value}"):
+        with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
             check = result.json()
-            check_info = check.get(key_level_1, {}).get(key_name_2)
+            check_info = check.get(key_level_1, {}).get(key_name)
             assert check_info == expected_value, \
-                f"Ожидаемое значение в ключе {key_name_2} не верное! Фактическое: {check_info}. " \
+                f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
                 f"Ожидаемое: {expected_value}"
 
     @staticmethod
-    def check_json_value_array_level_3(result, key_level_1, key_level_2, key_name_3, expected_value):
+    def check_json_value_array_level_3(result, key_level_1: str, key_level_2: str, key_name: str, expected_value):
         """Метод для проверки значения в ответе запроса на третьем уровне массива"""
-        with allure.step(f"В ключе {key_name_3} верное ожидаемое значение {expected_value}"):
+        with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
             check = result.json()
-            check_info = check.get(key_level_1, {}).get(key_level_2, {}).get(key_name_3)
+            check_info = check.get(key_level_1, {}).get(key_level_2, {}).get(key_name)
             assert check_info == expected_value, \
-                f"Ожидаемое значение в ключе {key_name_3} не верное! Фактическое: {check_info}. " \
+                f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
+                f"Ожидаемое: {expected_value}"
+
+    @staticmethod
+    def check_json_value_array_level_4(result, key_level_1: str, key_level_2: str, key_level_3: str, key_name: str,
+                                       expected_value):
+        """Метод для проверки значения в ответе запроса на третьем уровне массива"""
+        with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
+            check = result.json()
+            check_info = check.get(key_level_1, {}).get(key_level_2, {}).get(key_level_3, {}).get(key_name)
+            assert check_info == expected_value, \
+                f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
                 f"Ожидаемое: {expected_value}"
 
     @staticmethod

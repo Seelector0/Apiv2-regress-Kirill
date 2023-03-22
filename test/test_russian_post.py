@@ -1,16 +1,13 @@
-from utils.api_delivery_service import DeliveryServiceApi
-from utils.api_order import OrderApi
-from utils.api_parcelr import ParcelApi
+from utils.api.api_delivery_service import DeliveryServiceApi
+from utils.api.api_order import OrderApi
 from utils.checking import Checking
-from utils.clear_db import clear_db
-import time
 import allure
 import pytest
 
 
 @allure.description("Тестирование подключения Почты России")
 def test_new_connection(access_token, shop):
-    """Создание подключения"""
+    """Создание подключения POST"""
     result_post_connections = DeliveryServiceApi.delivery_service_russian_post(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_post_connections, status_code=201)
     Checking.check_json_required_keys(result=result_post_connections, required_key=['id', 'type', 'url', 'status'])
@@ -20,7 +17,7 @@ def test_new_connection(access_token, shop):
                                                check_value=shop[1],
                                                regexp_pattern=r'\/shops\/(.+)\/delivery_services\/.*')
 
-    """Получение настроек службы доставки Почта России"""
+    """Получение настроек службы доставки Почта России GET"""
     result_get_connections = DeliveryServiceApi.get_delivery_service_code(shop_id=shop[1], headers=access_token,
                                                                           code='RussianPost')
     Checking.check_status_code(result=result_get_connections, status_code=200)
@@ -30,9 +27,9 @@ def test_new_connection(access_token, shop):
     Checking.check_json_value(result=result_get_connections, key_name='name', expected_value='Почта России')
     Checking.check_json_value(result=result_get_connections, key_name='hasAggregation', expected_value=True)
     Checking.check_json_value_array_level_3(result=result_get_connections, key_level_1='credentials',
-                                            key_level_2='data', key_name_3='type', expected_value="integration")
+                                            key_level_2='data', key_name='type', expected_value="integration")
 
-    """Получение настроек всех служб доставки"""
+    """Получение настроек всех служб доставки GET"""
     result_get_all_connections = DeliveryServiceApi.get_delivery_service(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_get_all_connections, status_code=200)
     Checking.check_json_required_keys_array(result=result_get_all_connections, required_key=['code', 'name',
@@ -40,11 +37,47 @@ def test_new_connection(access_token, shop):
                                                                                              'active', 'visibility',
                                                                                              'type', 'moderation'])
 
+    """Редактирование полей службы доставки PATCH"""
+    result_patch_connections = DeliveryServiceApi.patch_delivery_service_code(shop_id=shop[1], code='RussianPost',
+                                                                              headers=access_token)
+    Checking.check_status_code(result=result_patch_connections, status_code=200)
+    Checking.check_json_required_keys(result=result_patch_connections, required_key=['code', 'name', 'hasAggregation',
+                                                                                     'credentials'])
+    Checking.check_json_value_array_level_2(result=result_patch_connections, key_level_1='credentials',
+                                            key_name='visibility', expected_value=False)
+    Checking.check_json_value_array_level_4(result=result_patch_connections, key_level_1='credentials',
+                                            key_level_2='settings', key_level_3='tariffs',
+                                            key_name='restrict', expected_value=None)
+    Checking.check_json_value_array_level_4(result=result_patch_connections, key_level_1='credentials',
+                                            key_level_2='settings', key_level_3='tariffs',
+                                            key_name='exclude', expected_value=['14', '25'])
 
-# @pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
-# def test_create_new_order(access_token, shop, warehouse, connection, payment_type):
-#     result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
-#                                               payment_type=payment_type)
+    """Обновление службы доставки PUT"""
+    result_put_connections = DeliveryServiceApi.put_delivery_service(shop_id=shop[1], code='RussianPost',
+                                                                     headers=access_token)
+    Checking.check_status_code(result=result_put_connections, status_code=409)
+
+    """Удаление службы доставки DELETE"""
+    result_delete_connections = DeliveryServiceApi.delete_delivery_service(shop_id=shop[1], code='RussianPost',
+                                                                           headers=access_token)
+    Checking.check_status_code(result=result_delete_connections, status_code=409)
+
+    """Деактивация службы доставки POST"""
+    result_deactivate_connections = DeliveryServiceApi.delivery_service_deactivate(shop_id=shop[1], code='RussianPost',
+                                                                                   headers=access_token)
+    Checking.check_status_code(result=result_deactivate_connections, status_code=204)
+
+    """Активация службы доставки POST"""
+    result_activate_connections = DeliveryServiceApi.delivery_service_activate(shop_id=shop[1], code='RussianPost',
+                                                                               headers=access_token)
+    Checking.check_status_code(result=result_activate_connections, status_code=204)
+
+
+@pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
+def test_create_new_order(access_token, shop, warehouse, connection, payment_type):
+    result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
+                                              payment_type=payment_type)
+    Checking.check_status_code(result=result_post_order, status_code=201)
 #
 #
 # def test_create_new_parcel(access_token, shop, warehouse, connection, order):
