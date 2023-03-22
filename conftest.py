@@ -3,6 +3,7 @@ from environment import Env
 import pytest
 import requests
 
+from utils.api_delivery_service import DeliveryServiceApi
 from utils.api_order import OrderApi
 from utils.api_parcelr import ParcelApi
 from utils.api_shop import ShopApi
@@ -20,28 +21,36 @@ def access_token():
     return token
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def shop(access_token):
     result_post_shop = ShopApi.create_shop(headers=access_token)
     shop_id = result_post_shop.json().get('id')
     return result_post_shop, shop_id
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def warehouse(access_token):
     result_post_warehouse = WarehouseApi.create_warehouse(headers=access_token)
     shop_id = result_post_warehouse.json().get('id')
     return result_post_warehouse, shop_id
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
+def connection(access_token, shop, warehouse):
+    result_post_connection = DeliveryServiceApi.delivery_service_russian_post(shop_id=shop[1], headers=access_token)
+    connection_id = result_post_connection.json().get('id')
+    return result_post_connection, connection_id
+
+
+@pytest.fixture(scope="function")
 def order(access_token, shop, warehouse):
-    result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token)
+    result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
+                                              payment_type='Paid')
     order_id = result_post_order.json().get('id')
     return result_post_order, order_id
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def parcel(access_token, order):
     parcel_id = []
     result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)

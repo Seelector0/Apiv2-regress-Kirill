@@ -1,16 +1,15 @@
-import allure
-
 from utils.api_delivery_service import DeliveryServiceApi
 from utils.api_order import OrderApi
 from utils.api_parcelr import ParcelApi
-from utils.api_shop import ShopApi
-from utils.api_warehouse import WarehouseApi
 from utils.checking import Checking
 from utils.clear_db import clear_db
+import time
+import allure
+import pytest
 
 
 @allure.description("Тестирование подключения Почты России")
-def test_connection(shop, access_token):
+def test_new_connection(access_token, shop):
     result_post_connections = DeliveryServiceApi.delivery_service_russian_post(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_post_connections, status_code=201)
     Checking.check_json_required_keys(result=result_post_connections, required_key=['id', 'type', 'url', 'status'])
@@ -21,23 +20,16 @@ def test_connection(shop, access_token):
                                                regexp_pattern=r'\/shops\/(.+)\/delivery_services\/.*')
 
 
+@pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
+def test_create_new_order(access_token, shop, warehouse, connection, payment_type):
+    result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
+                                              payment_type=payment_type)
 
 
+def test_create_new_parcel(access_token, shop, warehouse, connection, order):
+    # time.sleep(5)
+    result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)
 
-# def test_create_new_order_2(new_shop, new_warehouse, access_token):
-#     shop_id = new_shop.json().get('id')
-#     warehouse_id = new_warehouse.json().get('id')
-#     result_post_order = OrderApi.create_order(shop_id=shop_id, warehouse_id=warehouse_id, headers=access_token, sec=6)
-#     print(result_post_order.json().get('id'))
-#     print(shop_id)
-#     print(warehouse_id)
-#
-# def test_create_new_parcel(new_order, access_token):
-#     new_order_id = new_order.json().get('id')
-#     result_post_parcel = ParcelApi.create_parcel(order_id=new_order_id, headers=access_token)
-#     print(new_order_id)
-#     # print(result_post_parcel.json().get('id'))
-#
 # def test_create_new_parcel_2(new_parcel, access_token):
 #     print(new_parcel)
 #     print(new_parcel.json().get('id'))
