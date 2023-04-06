@@ -1,5 +1,6 @@
 import re
 import allure
+from typing import Tuple
 
 
 class Checking:
@@ -89,6 +90,22 @@ class Checking:
                 f"Значение {result} из ответа не соответствует {check_value}"
             # print(f'Значение из ответа {result} соответствует {check_value}')
 
+    @staticmethod
+    def check_json_value_nested(
+            result,
+            key_tuple: Tuple[str, ...],
+            expected_value
+    ):
+        """Метод для проверки значения в ответе запроса на любом уровне вложенности."""
+        result = result.json()
+        for key_name in key_tuple:
+            result = result.get(key_name, {})
+
+        check_info = result
+        assert check_info == expected_value, \
+            f"Ожидаемое значение в ключе {key_tuple} не верное! Фактическое: {check_info}. " \
+            f"Ожидаемое: {expected_value}"
+
     # """Метод для проверки слова в ответе по заданному значению"""
 
     # @staticmethod
@@ -98,3 +115,6 @@ class Checking:
     #         check_info = check.get(field_name)
     #         assert search_word in check_info
     #         print(f'Слово {search_word} присутствует!!!')
+
+
+

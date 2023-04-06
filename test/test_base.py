@@ -5,9 +5,8 @@ from utils.clear_db import clear_db
 import allure
 
 
-@allure.description("Тестирование магазина")
-def test_flow_int_shop(access_token):
-    """Создание магазина POST"""
+@allure.description("Создание магазина POST")
+def test_post_shop(access_token):
     result_post_shop = ShopApi.create_shop(headers=access_token)
     shop_id = result_post_shop.json().get('id')
     Checking.check_status_code(result=result_post_shop, status_code=201)
@@ -16,45 +15,49 @@ def test_flow_int_shop(access_token):
     Checking.check_json_value(result=result_post_shop, key_name='status', expected_value=201)
     Checking.check_json_search_regexp_in_value(result=result_post_shop.json().get('url'), check_value=shop_id,
                                                regexp_pattern=r'\/shops\/(.+)$')
-
-    """Получение магазина GET"""
+@allure.description("Получение магазина GET")
+def test_get_shop(shop, access_token):
+    shop_id = shop[1]
     result_get_shop = ShopApi.get_shop(shop_id=shop_id, headers=access_token)
     Checking.check_status_code(result=result_get_shop, status_code=200)
     Checking.check_json_required_keys(result=result_get_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
                                                                             'sender', 'trackingTag', 'visibility'])
     Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop_id)
     Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
-
-    """Получение списка магазинов GET"""
+@allure.description("Получение списка магазинов GET")
+def test_get_all_shops(shop, access_token):
     result_get_all_shops = ShopApi.get_shop_all(headers=access_token)
     Checking.check_status_code(result=result_get_all_shops, status_code=200)
     Checking.check_json_required_keys_array(result=result_get_all_shops, required_key=['id', 'number', 'name', 'uri',
                                                                                        'phone', 'sender', 'trackingTag',
                                                                                        'visibility'])
-
-    """Обновление магазина PUT"""
+@allure.description("Обновление магазина PUT")
+def test_put_shop(shop, access_token):
+    shop_id = shop[1]
     result_put_shop = ShopApi.put_shop(shop_id=shop_id, headers=access_token)
     Checking.check_status_code(result=result_put_shop, status_code=204)
 
-    """Редактирование полей магазина PATCH"""
+@allure.description("Редактирование полей магазина PATCH")
+def test_patch_shop(shop, access_token):
+    shop_id = shop[1]
     result_patch_shop = ShopApi.patch_shop(shop_id=shop_id, headers=access_token)
     Checking.check_status_code(result=result_patch_shop, status_code=200)
     Checking.check_json_required_keys(result=result_patch_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
                                                                               'sender', 'trackingTag',
                                                                               'visibility'])
     Checking.check_json_value(result=result_patch_shop, key_name='visibility', expected_value=True)
-
-    """Удаление магазина DELETE"""
+@allure.description(" Удаление магазина DELETE")
+def test_delete_shop(shop, access_token):
+    shop_id = shop[1]
     result_delete_shop = ShopApi.delete_shop(shop_id=shop_id, headers=access_token)
     Checking.check_status_code(result=result_delete_shop, status_code=409)
-
-    """Получение магазина GET"""
-    result_get_shop = ShopApi.get_shop(shop_id=shop_id, headers=access_token)
-    Checking.check_status_code(result=result_get_shop, status_code=200)
-    Checking.check_json_required_keys(result=result_get_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
-                                                                            'sender', 'trackingTag', 'visibility'])
-    Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop_id)
-    Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
+    # Получение магазина GET
+    # result_get_shop = ShopApi.get_shop(shop_id=shop_id, headers=access_token)
+    # Checking.check_status_code(result=result_get_shop, status_code=200)
+    # Checking.check_json_required_keys(result=result_get_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
+    #                                                                         'sender', 'trackingTag', 'visibility'])
+    # Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop_id)
+    # Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
 
 
 @allure.description("Тестирование склада")

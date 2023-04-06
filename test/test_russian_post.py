@@ -1,5 +1,6 @@
 from utils.api.api_delivery_service import DeliveryServiceApi
 from utils.api.api_order import OrderApi
+from utils.api.api_parcelr import ParcelApi
 from utils.checking import Checking
 import allure
 import pytest
@@ -16,7 +17,6 @@ def test_new_connection(access_token, shop):
     Checking.check_json_search_regexp_in_value(result=result_post_connections.json().get('url'),
                                                check_value=shop[1],
                                                regexp_pattern=r'\/shops\/(.+)\/delivery_services\/.*')
-
     """Получение настроек службы доставки Почта России GET"""
     result_get_connections = DeliveryServiceApi.get_delivery_service_code(shop_id=shop[1], headers=access_token,
                                                                           code='RussianPost')
@@ -28,7 +28,8 @@ def test_new_connection(access_token, shop):
     Checking.check_json_value(result=result_get_connections, key_name='hasAggregation', expected_value=True)
     Checking.check_json_value_array_level_3(result=result_get_connections, key_level_1='credentials',
                                             key_level_2='data', key_name='type', expected_value="integration")
-
+    Checking.check_json_value_nested(result=result_get_connections, key_tuple=('credentials', 'data', 'type'),
+                                     expected_value="integration")
     """Получение настроек всех служб доставки GET"""
     result_get_all_connections = DeliveryServiceApi.get_delivery_service(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_get_all_connections, status_code=200)
@@ -36,7 +37,6 @@ def test_new_connection(access_token, shop):
                                                                                              'hasAggregation', 'id',
                                                                                              'active', 'visibility',
                                                                                              'type', 'moderation'])
-
     """Редактирование полей службы доставки PATCH"""
     result_patch_connections = DeliveryServiceApi.patch_delivery_service_code(shop_id=shop[1], code='RussianPost',
                                                                               headers=access_token)
@@ -56,33 +56,31 @@ def test_new_connection(access_token, shop):
     result_put_connections = DeliveryServiceApi.put_delivery_service(shop_id=shop[1], code='RussianPost',
                                                                      headers=access_token)
     Checking.check_status_code(result=result_put_connections, status_code=409)
-
     """Удаление службы доставки DELETE"""
     result_delete_connections = DeliveryServiceApi.delete_delivery_service(shop_id=shop[1], code='RussianPost',
                                                                            headers=access_token)
     Checking.check_status_code(result=result_delete_connections, status_code=409)
-
     """Деактивация службы доставки POST"""
     result_deactivate_connections = DeliveryServiceApi.delivery_service_deactivate(shop_id=shop[1], code='RussianPost',
                                                                                    headers=access_token)
     Checking.check_status_code(result=result_deactivate_connections, status_code=204)
-
     """Активация службы доставки POST"""
     result_activate_connections = DeliveryServiceApi.delivery_service_activate(shop_id=shop[1], code='RussianPost',
                                                                                headers=access_token)
     Checking.check_status_code(result=result_activate_connections, status_code=204)
 
 
+@allure.description("Тестирование заказа Почты России")
 @pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
-def test_create_new_order(access_token, shop, warehouse, connection, payment_type):
+def test_create_new_order(access_token, shop, warehouse, payment_type):
     result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
                                               payment_type=payment_type)
     Checking.check_status_code(result=result_post_order, status_code=201)
 #
 #
-# def test_create_new_parcel(access_token, shop, warehouse, connection, order):
-#     # time.sleep(5)
-#     result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)
+def test_create_new_parcel(access_token, shop, warehouse, order):
+    # time.sleep(5)
+    result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)
 
 
 # def test_create_new_parcel_2(new_parcel, access_token):
