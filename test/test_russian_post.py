@@ -26,8 +26,6 @@ def test_new_connection(access_token, shop):
     Checking.check_json_value(result=result_get_connections, key_name='code', expected_value='RussianPost')
     Checking.check_json_value(result=result_get_connections, key_name='name', expected_value='Почта России')
     Checking.check_json_value(result=result_get_connections, key_name='hasAggregation', expected_value=True)
-    Checking.check_json_value_array_level_3(result=result_get_connections, key_level_1='credentials',
-                                            key_level_2='data', key_name='type', expected_value="integration")
     Checking.check_json_value_nested(result=result_get_connections, key_tuple=('credentials', 'data', 'type'),
                                      expected_value="integration")
     """Получение настроек всех служб доставки GET"""

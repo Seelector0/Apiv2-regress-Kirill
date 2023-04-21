@@ -23,6 +23,7 @@ def access_token():
 
 @pytest.fixture(scope="module")
 def shop(access_token):
+    """Создание магазина"""
     result_post_shop = ShopApi.create_shop(headers=access_token)
     shop_id = result_post_shop.json().get('id')
     return result_post_shop, shop_id
@@ -30,6 +31,7 @@ def shop(access_token):
 
 @pytest.fixture(scope="module")
 def warehouse(access_token):
+    """Создание склада"""
     result_post_warehouse = WarehouseApi.create_warehouse(headers=access_token)
     shop_id = result_post_warehouse.json().get('id')
     return result_post_warehouse, shop_id
@@ -37,6 +39,7 @@ def warehouse(access_token):
 
 @pytest.fixture(scope="module")
 def connection(access_token, shop, warehouse):
+    """Создание подключения к службе доставки"""
     result_post_connection = DeliveryServiceApi.delivery_service_russian_post(shop_id=shop[1], headers=access_token)
     connection_id = result_post_connection.json().get('id')
     return result_post_connection, connection_id
@@ -44,6 +47,7 @@ def connection(access_token, shop, warehouse):
 
 @pytest.fixture(scope="module")
 def order(access_token, shop, warehouse):
+    """Создание заказа"""
     result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
                                               payment_type='Paid')
     order_id = result_post_order.json().get('id')
@@ -52,6 +56,7 @@ def order(access_token, shop, warehouse):
 
 @pytest.fixture(scope="module")
 def parcel(access_token, order):
+    """Создание партии"""
     parcel_id = []
     result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)
     for parcel in result_post_parcel.json():
