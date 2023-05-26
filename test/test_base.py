@@ -4,7 +4,8 @@ from utils.checking import Checking
 import allure
 
 
-@allure.description("Создание магазина POST")
+@allure.epic("Магазин")
+@allure.title("Создание магазина методом POST")
 def test_post_shop(access_token):
     result_post_shop = ShopApi.create_shop(headers=access_token)
     shop_id = result_post_shop.json().get('id')
@@ -14,49 +15,59 @@ def test_post_shop(access_token):
     Checking.check_json_value(result=result_post_shop, key_name='status', expected_value=201)
     Checking.check_json_search_regexp_in_value(result=result_post_shop.json().get('url'), check_value=shop_id,
                                                regexp_pattern=r'\/shops\/(.+)$')
-@allure.description("Получение магазина GET")
+
+
+@allure.epic("Магазин")
+@allure.title("Получение магазина GET")
 def test_get_shop(shop, access_token):
-    shop_id = shop[1]
-    result_get_shop = ShopApi.get_shop(shop_id=shop_id, headers=access_token)
+    result_get_shop = ShopApi.get_shop(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_get_shop, status_code=200)
     Checking.check_json_required_keys(result=result_get_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
                                                                             'sender', 'trackingTag', 'visibility'])
-    Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop_id)
+    Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop[1])
     Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
-@allure.description("Получение списка магазинов GET")
+
+
+@allure.epic("Магазин")
+@allure.title("Получение списка магазинов GET")
 def test_get_all_shops(shop, access_token):
     result_get_all_shops = ShopApi.get_shop_all(headers=access_token)
     Checking.check_status_code(result=result_get_all_shops, status_code=200)
     Checking.check_json_required_keys_array(result=result_get_all_shops, required_key=['id', 'number', 'name', 'uri',
                                                                                        'phone', 'sender', 'trackingTag',
                                                                                        'visibility'])
-@allure.description("Обновление магазина PUT")
+
+
+@allure.epic("Магазин")
+@allure.title("Обновление магазина PUT")
 def test_put_shop(shop, access_token):
-    shop_id = shop[1]
-    result_put_shop = ShopApi.put_shop(shop_id=shop_id, headers=access_token)
+    result_put_shop = ShopApi.put_shop(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_put_shop, status_code=204)
 
-@allure.description("Редактирование полей магазина PATCH")
+
+@allure.epic("Магазин")
+@allure.title("Редактирование полей магазина PATCH")
 def test_patch_shop(shop, access_token):
-    shop_id = shop[1]
-    result_patch_shop = ShopApi.patch_shop(shop_id=shop_id, headers=access_token)
+    result_patch_shop = ShopApi.patch_shop(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_patch_shop, status_code=200)
     Checking.check_json_required_keys(result=result_patch_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
                                                                               'sender', 'trackingTag',
                                                                               'visibility'])
     Checking.check_json_value(result=result_patch_shop, key_name='visibility', expected_value=True)
-@allure.description(" Удаление магазина DELETE")
+
+
+@allure.epic("Магазин")
+@allure.title("Удаление магазина DELETE")
 def test_delete_shop(shop, access_token):
-    shop_id = shop[1]
-    result_delete_shop = ShopApi.delete_shop(shop_id=shop_id, headers=access_token)
+    result_delete_shop = ShopApi.delete_shop(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_delete_shop, status_code=409)
-    # Получение магазина GET
-    # result_get_shop = ShopApi.get_shop(shop_id=shop_id, headers=access_token)
-    # Checking.check_status_code(result=result_get_shop, status_code=200)
-    # Checking.check_json_required_keys(result=result_get_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
-    #                                                                         'sender', 'trackingTag', 'visibility'])
-    # Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop_id)
-    # Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
+    # Проверка, что магазин не удалился и его можно получить
+    result_get_shop = ShopApi.get_shop(shop_id=shop[1], headers=access_token)
+    Checking.check_status_code(result=result_get_shop, status_code=200)
+    Checking.check_json_required_keys(result=result_get_shop, required_key=['id', 'number', 'name', 'uri', 'phone',
+                                                                            'sender', 'trackingTag', 'visibility'])
+    Checking.check_json_value(result=result_get_shop, key_name='id', expected_value=shop[1])
+    Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
 
 
 @allure.description("Тестирование склада")
@@ -111,8 +122,10 @@ def test_flow_warehouse(access_token):
     Checking.check_json_value(result=result_get_warehouse, key_name='id', expected_value=warehouse_id)
     Checking.check_json_value(result=result_get_warehouse, key_name='visibility', expected_value=False)
     Checking.check_json_value(result=result_get_warehouse, key_name='pickup', expected_value=True)
-    Checking.check_json_value_array_level_2(result=result_get_warehouse, key_level_1='contact', key_name='fullName',
-                                            expected_value="Складов Скад Складович")
+
+    Checking.check_json_value_nested(result=result_get_warehouse, key_tuple=('contact', 'fullName'),
+                                     expected_value="Складов Скад Складович")
+
     Checking.check_json_search_regexp_in_value(result=result_get_warehouse.json().get('name'),
                                                check_value="Test Warehouse PUT",
                                                regexp_pattern=r'(Test Warehouse PUT).+$')
