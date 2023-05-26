@@ -15,6 +15,7 @@ class Env:
         db_user = os.environ.get('DB_USER_LOCAL')
         db_password = os.environ.get('DB_PASSWORD_LOCAL')
         db_host = os.environ.get('DB_HOST_LOCAL')
+        db_user_id = os.environ.get('USER_ID_LOCAl')
     elif os.environ.get('STAGE') == 'Develop':
         URL = os.environ.get('URL')
         client_id = os.environ.get('CLIENT_ID')

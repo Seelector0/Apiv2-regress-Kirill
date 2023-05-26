@@ -8,6 +8,7 @@ from utils.api.api_order import OrderApi
 from utils.api.api_parcelr import ParcelApi
 from utils.api.api_shop import ShopApi
 from utils.api.api_warehouse import WarehouseApi
+from utils.clear_db import clear_db
 
 
 @pytest.fixture(scope="module")
@@ -58,3 +59,7 @@ def parcel(access_token, order):
         parcel_id.append(parcel["id"])
         parcel_id = parcel_id[0]
     return result_post_parcel,
+
+
+def pytest_sessionfinish(session, exitstatus):
+    clear_db()

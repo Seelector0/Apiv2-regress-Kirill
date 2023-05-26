@@ -1,7 +1,6 @@
 from utils.api.api_shop import ShopApi
 from utils.api.api_warehouse import WarehouseApi
 from utils.checking import Checking
-from utils.clear_db import clear_db
 import allure
 
 
@@ -125,6 +124,3 @@ def test_flow_warehouse(access_token):
     result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse_id, headers=access_token)
     Checking.check_status_code(result=result_get_warehouse, status_code=404)
 
-    """Удаление магазина и склада из базы"""
-    shop_id = ShopApi.get_shops_id(headers=access_token)
-    clear_db(shop_id=f"'{shop_id[-1]}'", warehouse_id=f"'{warehouse_id}'")
