@@ -1,3 +1,5 @@
+import uuid
+
 from environment import Env
 
 import pytest
@@ -17,6 +19,7 @@ def access_token():
     data = dict(grant_type="client_credentials", client_id=Env.client_id, client_secret=Env.client_secret)
     resource = requests.post(url=f'{Env.URL}/auth/access_token', data=data)
     token = {
+        "x-trace-id": str(uuid.uuid4()),
         "Authorization": f'Bearer {resource.json()["access_token"]}'
     }
     return token

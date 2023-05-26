@@ -4,20 +4,19 @@ from utils.checking import Checking
 import allure
 
 
-@allure.epic("Магазин")
+@allure.epic("№1_Магазин")
 @allure.title("Создание магазина методом POST")
-def test_post_shop(access_token):
-    result_post_shop = ShopApi.create_shop(headers=access_token)
-    shop_id = result_post_shop.json().get('id')
+def test_post_shop(shop, access_token):
+    result_post_shop = shop[0]
     Checking.check_status_code(result=result_post_shop, status_code=201)
     Checking.check_json_required_keys(result=result_post_shop, required_key=['id', 'type', 'url', 'status'])
     Checking.check_json_value(result=result_post_shop, key_name='type', expected_value='Shop')
     Checking.check_json_value(result=result_post_shop, key_name='status', expected_value=201)
-    Checking.check_json_search_regexp_in_value(result=result_post_shop.json().get('url'), check_value=shop_id,
+    Checking.check_json_search_regexp_in_value(result=result_post_shop.json().get('url'), check_value=shop[1],
                                                regexp_pattern=r'\/shops\/(.+)$')
 
 
-@allure.epic("Магазин")
+@allure.epic("№1_Магазин")
 @allure.title("Получение магазина GET")
 def test_get_shop(shop, access_token):
     result_get_shop = ShopApi.get_shop(shop_id=shop[1], headers=access_token)
@@ -28,7 +27,7 @@ def test_get_shop(shop, access_token):
     Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
 
 
-@allure.epic("Магазин")
+@allure.epic("№1_Магазин")
 @allure.title("Получение списка магазинов GET")
 def test_get_all_shops(shop, access_token):
     result_get_all_shops = ShopApi.get_shop_all(headers=access_token)
@@ -38,14 +37,14 @@ def test_get_all_shops(shop, access_token):
                                                                                        'visibility'])
 
 
-@allure.epic("Магазин")
+@allure.epic("№1_Магазин")
 @allure.title("Обновление магазина PUT")
 def test_put_shop(shop, access_token):
     result_put_shop = ShopApi.put_shop(shop_id=shop[1], headers=access_token)
     Checking.check_status_code(result=result_put_shop, status_code=204)
 
 
-@allure.epic("Магазин")
+@allure.epic("№1_Магазин")
 @allure.title("Редактирование полей магазина PATCH")
 def test_patch_shop(shop, access_token):
     result_patch_shop = ShopApi.patch_shop(shop_id=shop[1], headers=access_token)
@@ -56,7 +55,7 @@ def test_patch_shop(shop, access_token):
     Checking.check_json_value(result=result_patch_shop, key_name='visibility', expected_value=True)
 
 
-@allure.epic("Магазин")
+@allure.epic("№1_Магазин")
 @allure.title("Удаление магазина DELETE")
 def test_delete_shop(shop, access_token):
     result_delete_shop = ShopApi.delete_shop(shop_id=shop[1], headers=access_token)
@@ -70,30 +69,36 @@ def test_delete_shop(shop, access_token):
     Checking.check_json_value(result=result_get_shop, key_name='visibility', expected_value=True)
 
 
-@allure.description("Тестирование склада")
-def test_flow_warehouse(access_token):
-    """Создание склада POST"""
-    result_post_warehouse = WarehouseApi.create_warehouse(headers=access_token)
-    warehouse_id = result_post_warehouse.json().get('id')
+@allure.epic("№2_Склад")
+@allure.title("Создание склада POST")
+def test_post_warehouse(warehouse, access_token):
+    result_post_warehouse = warehouse[0]
     Checking.check_status_code(result=result_post_warehouse, status_code=201)
     Checking.check_json_required_keys(result=result_post_warehouse, required_key=['id', 'type', 'url', 'status'])
     Checking.check_json_value(result=result_post_warehouse, key_name='type', expected_value='Warehouse')
     Checking.check_json_value(result=result_post_warehouse, key_name='status', expected_value=201)
     Checking.check_json_search_regexp_in_value(result=result_post_warehouse.json().get('url'),
-                                               check_value=warehouse_id,
+                                               check_value=warehouse[1],
                                                regexp_pattern=r'\/warehouses\/(.+)$')
 
-    """Получение склада GET"""
-    result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse_id, headers=access_token)
+
+@allure.epic("№2_Склад")
+@allure.title("Получение склада GET")
+def test_get_warehouse(warehouse, access_token):
+    result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse[1], headers=access_token)
     Checking.check_status_code(result=result_get_warehouse, status_code=200)
     Checking.check_json_required_keys(result=result_get_warehouse, required_key=['id', 'number', 'name', 'visibility',
                                                                                  'address', 'contact', 'workingTime',
                                                                                  'pickup', 'dpdPickupNum', 'comment'])
-    Checking.check_json_value(result=result_get_warehouse, key_name='id', expected_value=warehouse_id)
+    Checking.check_json_value(result=result_get_warehouse, key_name='id', expected_value=warehouse[1])
     Checking.check_json_value(result=result_get_warehouse, key_name='visibility', expected_value=True)
     Checking.check_json_search_regexp_in_value(result=result_get_warehouse.json().get('name'),
                                                check_value="Test Warehouse", regexp_pattern=r'(Test Warehouse).+$')
-    """Получение списка складов GET"""
+
+
+@allure.epic("№2_Склад")
+@allure.title("Получение списка складов GET")
+def test_get_all_warehouse(warehouse, access_token):
     result_get_all_warehouses = WarehouseApi.get_warehouse_all(headers=access_token)
     Checking.check_status_code(result=result_get_all_warehouses, status_code=200)
     Checking.check_json_required_keys_array(result=result_get_all_warehouses, required_key=['id', 'number', 'name',
@@ -101,39 +106,47 @@ def test_flow_warehouse(access_token):
                                                                                             'contact', 'workingTime',
                                                                                             'pickup', 'dpdPickupNum',
                                                                                             'comment'])
-    """Обновление склада PUT"""
-    result_put_warehouse = WarehouseApi.put_warehouse(warehouse_id=warehouse_id, headers=access_token)
+
+
+@allure.epic("№2_Склад")
+@allure.title("Обновление склада PUT")
+def test_put_warehouse(warehouse, access_token):
+    result_put_warehouse = WarehouseApi.put_warehouse(warehouse_id=warehouse[1], headers=access_token)
     Checking.check_status_code(result=result_put_warehouse, status_code=204)
 
-    """Редактирование полей склада PATCH"""
-    result_patch_warehouse = WarehouseApi.patch_warehouse(warehouse_id=warehouse_id, headers=access_token)
+
+@allure.epic("№2_Склад")
+@allure.title("Редактирование полей склада PATCH")
+def test_patch_warehouse(warehouse, access_token):
+    result_patch_warehouse = WarehouseApi.patch_warehouse(warehouse_id=warehouse[1], headers=access_token)
     Checking.check_status_code(result=result_patch_warehouse, status_code=200)
     Checking.check_json_required_keys(result=result_patch_warehouse, required_key=['id', 'number', 'name', 'visibility',
                                                                                    'address', 'contact', 'workingTime',
                                                                                    'pickup', 'dpdPickupNum', 'comment'])
     Checking.check_json_value(result=result_patch_warehouse, key_name='visibility', expected_value=False)
 
-    """Получение склада GET"""
-    result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse_id, headers=access_token)
+    # Проверка, что склад обновился
+    result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse[1], headers=access_token)
     Checking.check_status_code(result=result_get_warehouse, status_code=200)
     Checking.check_json_required_keys(result=result_get_warehouse, required_key=['id', 'number', 'name', 'visibility',
                                                                                  'address', 'contact', 'workingTime',
                                                                                  'pickup', 'dpdPickupNum', 'comment'])
-    Checking.check_json_value(result=result_get_warehouse, key_name='id', expected_value=warehouse_id)
+    Checking.check_json_value(result=result_get_warehouse, key_name='id', expected_value=warehouse[1])
     Checking.check_json_value(result=result_get_warehouse, key_name='visibility', expected_value=False)
     Checking.check_json_value(result=result_get_warehouse, key_name='pickup', expected_value=True)
 
     Checking.check_json_value_nested(result=result_get_warehouse, key_tuple=('contact', 'fullName'),
-                                     expected_value="Складов Скад Складович")
+                                     expected_value="Складов Виктор Сергеевич")
 
     Checking.check_json_search_regexp_in_value(result=result_get_warehouse.json().get('name'),
                                                check_value="Test Warehouse PUT",
                                                regexp_pattern=r'(Test Warehouse PUT).+$')
-    """Удаление склада DELETE"""
-    result_delete_shop = WarehouseApi.delete_warehouse(warehouse_id=warehouse_id, headers=access_token)
+
+
+@allure.epic("№2_Склад")
+@allure.title("Удаление склада DELETE")
+def test_delete_warehouse(warehouse, access_token):
+    result_delete_shop = WarehouseApi.delete_warehouse(warehouse_id=warehouse[1], headers=access_token)
     Checking.check_status_code(result=result_delete_shop, status_code=204)
-
-    """Получение склада GET"""
-    result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse_id, headers=access_token)
+    result_get_warehouse = WarehouseApi.get_warehouse(warehouse_id=warehouse[1], headers=access_token)
     Checking.check_status_code(result=result_get_warehouse, status_code=404)
-
