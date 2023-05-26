@@ -32,6 +32,12 @@ def clear_db():
         count = cursor.rowcount
         print(count, "Запись о заказах успешно удалена")
 
+        # Выполнение SQL-запроса для удаления конекшенов
+        cursor.execute(f"DELETE FROM customer.credential WHERE user_id = '{Env.db_user_id}'")
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Запись о конекшинах успешно удалена")
+
     except (Exception, Error) as error:
         print("Ошибка при работе с PostgreSQL", error)
     finally:
