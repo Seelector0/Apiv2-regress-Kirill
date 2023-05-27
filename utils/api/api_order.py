@@ -9,7 +9,7 @@ class OrderApi:
     """Метод для создания склада"""
 
     @staticmethod
-    def create_order(headers, warehouse_id, shop_id, payment_type):
+    def create_order(headers, warehouse_id, shop_id, payment_type, delivery_type='Courier'):
         """Создание заказа"""
         json_for_create_new_order = {
             "warehouse": {
@@ -31,7 +31,7 @@ class OrderApi:
             },
             "weight": 6,
             "delivery": {
-                "type": "Courier",
+                "type": delivery_type,
                 "service": "RussianPost",
                 "tariff": "24",
                 "date": "",
