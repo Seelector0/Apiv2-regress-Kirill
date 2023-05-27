@@ -96,15 +96,20 @@ class TestOrder:
     @pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
     def test_create_new_order(self, access_token, shop, warehouse, payment_type):
         result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
-                                                  payment_type=payment_type)
+                                                  payment_type=payment_type, delivery_type='PostOffice')
         Checking.check_status_code(result=result_post_order, status_code=201)
+        print(result_post_order.json()["id"])
+        if payment_type == "Paid":
+            TestOrder.order_id = result_post_order.json()["id"]
+            print(TestOrder.order_id)
 
 
 @allure.epic("№5_Заказы Почты России")
 class TestParcel:
-    def test_create_new_parcel(self, access_token, shop, warehouse, order):
+    def test_create_new_parcel(self, access_token, shop, warehouse):
+        order_id_local = TestOrder.order_id
         time.sleep(4)
-        result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)
+        result_post_parcel = ParcelApi.create_parcel(order_id=order_id_local, headers=access_token)
         Checking.check_status_code(result=result_post_parcel, status_code=207)
 
 # def test_create_new_parcel_2(new_parcel, access_token):
