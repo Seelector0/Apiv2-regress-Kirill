@@ -107,13 +107,19 @@ class TestOrder:
         if payment_type == "Paid":
             TestOrder.order_id = result_post_order.json()["id"]
 
+    def test_get_order(self, access_token):
+        order_id = TestOrder.order_id
+        result_get_order = OrderApi.get_order(order_id=order_id, headers=access_token)
+        Checking.check_status_code(result=result_get_order, status_code=200)
+        print(result_get_order.json())
+
 
 @allure.epic("№5_Заказы Почты России")
 class TestParcel:
     def test_create_new_parcel(self, access_token, shop, warehouse):
-        order_id_local = TestOrder.order_id
+        order_id = TestOrder.order_id
         time.sleep(4)
-        result_post_parcel = ParcelApi.create_parcel(order_id=order_id_local, headers=access_token)
+        result_post_parcel = ParcelApi.create_parcel(order_id=order_id, headers=access_token)
         Checking.check_status_code(result=result_post_parcel, status_code=207)
 
 # def test_create_new_parcel_2(new_parcel, access_token):
