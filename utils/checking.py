@@ -24,6 +24,14 @@ class Checking:
             # print(f'Обязательные ключи {list(token)} присутствуют')
 
     @staticmethod
+    def check_response_body_key_not_empty(result, key):
+        """Метод для проверки, что значение по указанному ключу в теле ответа не пустое"""
+        with allure.step(f"Значение по ключу '{key}' не пустое"):
+            response_body = result.json()
+            assert key in response_body and response_body[key] is not None, f"Значение по ключу '{key}' пустое или " \
+                                                                            f"отсутствует"
+
+    @staticmethod
     def check_json_required_keys(result, required_key: list):
         """Метод для проверки наличия ключей в ответе запроса, необязательно указывать все ключи"""
         with allure.step(f"Ключи {required_key} присутствуют"):
