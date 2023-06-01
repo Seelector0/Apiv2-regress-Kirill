@@ -1,4 +1,3 @@
-
 from utils.api.api_delivery_service import DeliveryServiceApi
 from utils.api.api_order import OrderApi
 from utils.api.api_parcelr import ParcelApi
@@ -98,16 +97,16 @@ class TestOrder:
     def test_post_order(self, access_token, shop, warehouse, payment_type):
         result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
                                                   payment_type=payment_type, delivery_type='PostOffice')
-        Checking.check_status_code(result=result_post_order, status_code=201)
+        # Записываем id заказ в переменную
+        if payment_type == "Paid":
+            TestOrder.order_id = result_post_order.json()["id"]
+        Checking.check_status_code(result=result_post_order, status_code=202)
         Checking.check_json_required_keys(result=result_post_order, required_key=['id', 'type', 'url', 'status'])
         Checking.check_json_value(result=result_post_order, key_name='type', expected_value='Order')
         Checking.check_json_value(result=result_post_order, key_name='status', expected_value=201)
         Checking.check_json_search_regexp_in_value(result=result_post_order.json().get('url'),
                                                    check_value=result_post_order.json().get('id'),
                                                    regexp_pattern=r'\/orders\/(.+)$')
-        # Записываем id заказ в переменную
-        if payment_type == "Paid":
-            TestOrder.order_id = result_post_order.json()["id"]
 
     def test_get_all_orders(self, access_token):
         result_get_all_orders = OrderApi.get_orders_all(headers=access_token)
