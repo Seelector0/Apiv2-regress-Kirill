@@ -81,15 +81,15 @@ class OrderApi:
     """Метод для проверки всех складов"""
 
     @staticmethod
-    def get_warehouse_all(headers):
-        get_url = f'{Env.URL}/v2/customer/warehouses'
-        result_get_warehouse_all = HttpMethods.get(get_url, headers)
-        return result_get_warehouse_all
+    def get_orders_all(headers):
+        get_url = f'{Env.URL}/v2/orders/'
+        result_get_orders_all = HttpMethods.get(get_url, headers)
+        return result_get_orders_all
 
     """Метод для проверки склада"""
 
     @staticmethod
-    def get_order(order_id, headers):
+    def get_orders(order_id, headers):
         get_url = f'{Env.URL}/v2/orders/{order_id}'
         result_get_order = HttpMethods.get(get_url, headers)
         return result_get_order

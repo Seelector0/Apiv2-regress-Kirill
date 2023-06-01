@@ -58,37 +58,6 @@ class Checking:
                 f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
                 f"Ожидаемое: {expected_value}"
 
-    # @staticmethod
-    # def check_json_value_array_level_2(result, key_level_1: str, key_name: str, expected_value):
-    #     """Метод для проверки значения в ответе запроса на втором уровне массива"""
-    #     with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
-    #         check = result.json()
-    #         check_info = check.get(key_level_1, {}).get(key_name)
-    #         assert check_info == expected_value, \
-    #             f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
-    #             f"Ожидаемое: {expected_value}"
-    #
-    # @staticmethod
-    # def check_json_value_array_level_3(result, key_level_1: str, key_level_2: str, key_name: str, expected_value):
-    #     """Метод для проверки значения в ответе запроса на третьем уровне массива"""
-    #     with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
-    #         check = result.json()
-    #         check_info = check.get(key_level_1, {}).get(key_level_2, {}).get(key_name)
-    #         assert check_info == expected_value, \
-    #             f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
-    #             f"Ожидаемое: {expected_value}"
-    #
-    # @staticmethod
-    # def check_json_value_array_level_4(result, key_level_1: str, key_level_2: str, key_level_3: str, key_name: str,
-    #                                    expected_value):
-    #     """Метод для проверки значения в ответе запроса на третьем уровне массива"""
-    #     with allure.step(f"В ключе {key_name} верное ожидаемое значение {expected_value}"):
-    #         check = result.json()
-    #         check_info = check.get(key_level_1, {}).get(key_level_2, {}).get(key_level_3, {}).get(key_name)
-    #         assert check_info == expected_value, \
-    #             f"Ожидаемое значение в ключе {key_name} не верное! Фактическое: {check_info}. " \
-    #             f"Ожидаемое: {expected_value}"
-
     @staticmethod
     def check_json_search_regexp_in_value(result, regexp_pattern, check_value):
         """Метод для проверки по регулярному выражению, выбираем определенное значение с помощью regexp и сравниваем"""
@@ -114,6 +83,18 @@ class Checking:
             f"Ожидаемое значение в ключе {key_tuple} не верное! Фактическое: {check_info}. " \
             f"Ожидаемое: {expected_value}"
 
+    @staticmethod
+    def check_unique_ids(result, id_key):
+        """Проверка уникальности идентификаторов в списке объектов"""
+        with allure.step(f"Проверка уникальности ключа {id_key}"):
+            objects = result.json()
+            object_ids = set()
+            for obj in objects:
+                obj_id = obj.get(id_key)
+                assert obj_id is not None, f"Объект не содержит идентификатор {id_key}"
+                assert obj_id not in object_ids, f"Дублирующийся идентификатор {id_key}: {obj_id}"
+                object_ids.add(obj_id)
+
     # """Метод для проверки слова в ответе по заданному значению"""
 
     # @staticmethod
@@ -123,6 +104,3 @@ class Checking:
     #         check_info = check.get(field_name)
     #         assert search_word in check_info
     #         print(f'Слово {search_word} присутствует!!!')
-
-
-
