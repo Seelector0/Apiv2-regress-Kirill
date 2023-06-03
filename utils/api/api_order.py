@@ -9,7 +9,7 @@ class OrderApi:
     """Метод для создания склада"""
 
     @staticmethod
-    def create_order(headers, warehouse_id, shop_id, payment_type):
+    def create_order(headers, warehouse_id, shop_id, payment_type, delivery_type, x_trace_id=None):
         """Создание заказа"""
         json_for_create_new_order = {
             "warehouse": {
@@ -31,9 +31,9 @@ class OrderApi:
             },
             "weight": 6,
             "delivery": {
-                "type": "Courier",
+                "type": delivery_type,
                 "service": "RussianPost",
-                "tariff": "24",
+                "tariff": "4",
                 "date": "",
                 "time": {
                     "from": "",
@@ -75,24 +75,24 @@ class OrderApi:
             ]
         }
         post_url = f'{Env.URL}/v2/orders'
-        result_post_shop = HttpMethods.post(post_url, json_for_create_new_order, headers)
+        result_post_shop = HttpMethods.post(post_url, json_for_create_new_order, headers, x_trace_id)
         return result_post_shop
 
     """Метод для проверки всех складов"""
 
     @staticmethod
-    def get_warehouse_all(headers):
-        get_url = f'{Env.URL}/v2/customer/warehouses'
-        result_get_warehouse_all = HttpMethods.get(get_url, headers)
-        return result_get_warehouse_all
+    def get_orders_all(headers):
+        get_url = f'{Env.URL}/v2/orders/'
+        result_get_orders_all = HttpMethods.get(get_url, headers)
+        return result_get_orders_all
 
     """Метод для проверки склада"""
 
     @staticmethod
-    def get_warehouse(warehouse_id, headers):
-        get_url = f'{Env.URL}/v2/customer/warehouses/{warehouse_id}'
-        result_get_warehouse = HttpMethods.get(get_url, headers)
-        return result_get_warehouse
+    def get_orders(order_id, headers, x_trace_id=None, report_allure=True):
+        get_url = f'{Env.URL}/v2/orders/{order_id}'
+        result_get_order = HttpMethods.get(get_url, headers=headers, x_trace_id=x_trace_id, report_allure=report_allure)
+        return result_get_order
 
     """Метод для обновления склада"""
 
