@@ -45,8 +45,8 @@ class WarehouseApi:
                 "raw": "125009 г Москва, ул Тверская, д 22/2 корп 1"
             },
             "contact": {
-                "fullName": "Складов Скад Складович",
-                "email": f'Testsklad{randint(100, 9999)}@mail.ru',
+                "fullName": "Складов Виктор Сергеевич",
+                "email": f'Test_sklad{randint(100, 9999)}@mail.ru',
                 "phone": f"+79{randint(100000000, 999999999)}"
             }
         }
