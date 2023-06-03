@@ -117,8 +117,8 @@ class TestOrder:
     def test_get_order(self, access_token):
         order_id = TestOrder.order_id
         Checking.checking_state_order(order_id=order_id, headers=access_token)
-        result_get_order = OrderApi.get_orders(order_id=order_id, headers=access_token)
-        Checking.check_status_code(result=result_get_order, status_code=200)
+        result_get_order = OrderApi.get_orders(order_id=order_id, headers=access_token, x_trace_id="Get_order_test")
+        Checking.check_status_code(result=result_get_order, status_code=2002)
         Checking.check_json_required_keys(result=result_get_order, required_key=['id', 'number', 'addressTo', 'data',
                                                                                  'parcel', 'status', 'statusReason',
                                                                                  'state', 'stateMessage', 'created'])

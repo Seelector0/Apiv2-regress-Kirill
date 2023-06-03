@@ -9,7 +9,7 @@ class OrderApi:
     """Метод для создания склада"""
 
     @staticmethod
-    def create_order(headers, warehouse_id, shop_id, payment_type, delivery_type):
+    def create_order(headers, warehouse_id, shop_id, payment_type, delivery_type, x_trace_id=None):
         """Создание заказа"""
         json_for_create_new_order = {
             "warehouse": {
@@ -75,7 +75,7 @@ class OrderApi:
             ]
         }
         post_url = f'{Env.URL}/v2/orders'
-        result_post_shop = HttpMethods.post(post_url, json_for_create_new_order, headers)
+        result_post_shop = HttpMethods.post(post_url, json_for_create_new_order, headers, x_trace_id)
         return result_post_shop
 
     """Метод для проверки всех складов"""
@@ -89,9 +89,9 @@ class OrderApi:
     """Метод для проверки склада"""
 
     @staticmethod
-    def get_orders(order_id, headers, report_allure=True):
+    def get_orders(order_id, headers, x_trace_id=None, report_allure=True):
         get_url = f'{Env.URL}/v2/orders/{order_id}'
-        result_get_order = HttpMethods.get(get_url, headers, report_allure)
+        result_get_order = HttpMethods.get(get_url, headers=headers, x_trace_id=x_trace_id, report_allure=report_allure)
         return result_get_order
 
     """Метод для обновления склада"""

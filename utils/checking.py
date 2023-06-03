@@ -101,9 +101,9 @@ class Checking:
     def checking_state_order(order_id, headers):
         with allure.step(f"Состояние заказа succeeded"):
             counter = 0
-            result = OrderApi.get_orders(order_id, headers, report_allure=False)
+            result = OrderApi.get_orders(order_id=order_id, headers=headers, report_allure=False)
             while result.json()["state"] in ["created", "registered", "external-processing"] and counter < 50:
-                result = OrderApi.get_orders(order_id, headers, report_allure=False)
+                result = OrderApi.get_orders(order_id=order_id, headers=headers, report_allure=False)
                 counter += 1
             # Проверяем, был ли достигнут максимальный счетчик циклов и закончились ли возможные статусы заказа
             if counter >= 50 and result.json()["state"] in ["created", "registered", "external-processing"]:
