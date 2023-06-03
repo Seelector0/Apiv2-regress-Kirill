@@ -1,3 +1,5 @@
+import uuid
+
 from environment import Env
 
 import pytest
@@ -17,48 +19,55 @@ def access_token():
     data = dict(grant_type="client_credentials", client_id=Env.client_id, client_secret=Env.client_secret)
     resource = requests.post(url=f'{Env.URL}/auth/access_token', data=data)
     token = {
+        "x-trace-id": str(uuid.uuid4()),
         "Authorization": f'Bearer {resource.json()["access_token"]}'
     }
     return token
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def shop(access_token):
+    """Создание магазина"""
     result_post_shop = ShopApi.create_shop(headers=access_token)
     shop_id = result_post_shop.json().get('id')
     return result_post_shop, shop_id
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def warehouse(access_token):
+    """Создание склада"""
     result_post_warehouse = WarehouseApi.create_warehouse(headers=access_token)
     shop_id = result_post_warehouse.json().get('id')
     return result_post_warehouse, shop_id
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def connection(access_token, shop, warehouse):
+    """Создание подключения к службе доставки"""
     result_post_connection = DeliveryServiceApi.delivery_service_russian_post(shop_id=shop[1], headers=access_token)
     connection_id = result_post_connection.json().get('id')
     return result_post_connection, connection_id
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def order(access_token, shop, warehouse):
+    """Создание заказа"""
     result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
                                               payment_type='Paid')
     order_id = result_post_order.json().get('id')
     return result_post_order, order_id
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def parcel(access_token, order):
+    """Создание партии"""
     parcel_id = []
     result_post_parcel = ParcelApi.create_parcel(order_id=order[1], headers=access_token)
     for parcel in result_post_parcel.json():
         parcel_id.append(parcel["id"])
         parcel_id = parcel_id[0]
     return result_post_parcel,
+
 
 def pytest_sessionfinish(session, exitstatus):
     clear_db()
