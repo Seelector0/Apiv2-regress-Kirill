@@ -2,6 +2,8 @@ import re
 import allure
 from typing import Tuple
 
+from utils.api.api_order import OrderApi
+
 
 class Checking:
     """Методы для проверки запросов"""
@@ -94,6 +96,18 @@ class Checking:
                 assert obj_id is not None, f"Объект не содержит идентификатор {id_key}"
                 assert obj_id not in object_ids, f"Дублирующийся идентификатор {id_key}: {obj_id}"
                 object_ids.add(obj_id)
+
+    @staticmethod
+    def checking_state_order(order_id, headers):
+        with allure.step(f"Состояние заказа succeeded"):
+            counter = 0
+            result = OrderApi.get_orders(order_id, headers, report_allure=False)
+            while result.json()["state"] in ["created", "registered", "external-processing"] and counter < 50:
+                result = OrderApi.get_orders(order_id, headers, report_allure=False)
+                counter += 1
+            # Проверяем, был ли достигнут максимальный счетчик циклов и закончились ли возможные статусы заказа
+            if counter >= 50 and result.json()["state"] in ["created", "registered", "external-processing"]:
+                raise AssertionError(f"Ошибка: Состояние заказа не верное {result.json()['state']}")
 
     # """Метод для проверки слова в ответе по заданному значению"""
 

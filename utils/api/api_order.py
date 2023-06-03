@@ -89,9 +89,9 @@ class OrderApi:
     """Метод для проверки склада"""
 
     @staticmethod
-    def get_orders(order_id, headers):
+    def get_orders(order_id, headers, report_allure=True):
         get_url = f'{Env.URL}/v2/orders/{order_id}'
-        result_get_order = HttpMethods.get(get_url, headers)
+        result_get_order = HttpMethods.get(get_url, headers, report_allure)
         return result_get_order
 
     """Метод для обновления склада"""

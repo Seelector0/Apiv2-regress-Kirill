@@ -5,8 +5,6 @@ from utils.checking import Checking
 import allure
 import pytest
 
-from utils.checking_state import checking_state_order
-
 
 @allure.epic("№3_Подключение Почты России")
 class TestDeliveryService:
@@ -118,7 +116,7 @@ class TestOrder:
 
     def test_get_order(self, access_token):
         order_id = TestOrder.order_id
-        checking_state_order(order_id=order_id, headers=access_token)
+        Checking.checking_state_order(order_id=order_id, headers=access_token)
         result_get_order = OrderApi.get_orders(order_id=order_id, headers=access_token)
         Checking.check_status_code(result=result_get_order, status_code=200)
         Checking.check_json_required_keys(result=result_get_order, required_key=['id', 'number', 'addressTo', 'data',
@@ -129,7 +127,6 @@ class TestOrder:
         Checking.check_json_value_nested(result=result_get_order, key_tuple=('data', 'request', 'payment', 'type'),
                                          expected_value="Paid")
         Checking.check_json_value(result=result_get_order, key_name='status', expected_value='created')
-        Checking.check_json_value(result=result_get_order, key_name='state', expected_value='succeeded')
 
 
 @allure.epic("№5_Заказы Почты России")

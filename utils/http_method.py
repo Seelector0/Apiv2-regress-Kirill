@@ -7,14 +7,20 @@ class HttpMethods:
     """Список HTTP методов"""
 
     @staticmethod
-    def get(url, headers):
-        """Метод GET"""
-        with allure.step(f"Метод GET {url}"):  # отображение в allure
-            Logger.add_request(url, method="GET")  # пишем в лог запрос
-            result = requests.get(url=url,
-                                  headers=headers)  # определяем как выглядит запрос и какие параметры должны быть
-            Logger.add_response(result)  # пишем в лог ответ
-            return result  # отдаем результат
+    def get(url, headers, report_allure=True):
+        """Метод GET с возможностью выбора добавления в отчет Allure"""
+        Logger.add_request(url, method="GET")  # пишем в лог запрос
+
+        result = requests.get(url=url, headers=headers)
+
+        if report_allure:
+            with allure.step(f"Метод GET {url}"):
+                Logger.add_response(result)
+
+        else:
+            Logger.add_response(result)
+
+        return result
 
     @staticmethod
     def post(url, body, headers):
@@ -52,10 +58,3 @@ class HttpMethods:
             Logger.add_response(result)
             return result
 
-    @staticmethod
-    def get_not_allure(url, headers):
-        """Метод GET без записи в отчет Allure"""
-        Logger.add_request(url, method="GET")  # пишем в лог запрос
-        result = requests.get(url=url, headers=headers)  # определяем как выглядит запрос и какие параметры должны быть
-        Logger.add_response(result)  # пишем в лог ответ
-        return result  # отдаем результат
