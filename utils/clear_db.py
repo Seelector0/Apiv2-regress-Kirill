@@ -62,5 +62,3 @@ def clear_db():
             cursor.close()
             connection.close()
             print("Соединение с PostgreSQL закрыто")
-
-
