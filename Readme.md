@@ -2,7 +2,7 @@
 allure   
 pytest   
 requests   
-dotenv  
+python-dotenv
 OS    
 pip install psycopg2-binary
 
