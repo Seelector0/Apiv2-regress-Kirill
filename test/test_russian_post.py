@@ -90,14 +90,15 @@ class TestDeliveryService:
 
 @allure.epic("№4_Заказы Почты России")
 class TestOrder:
+    order_ids = {}
     @allure.title("Создание заказа POST")
     @pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
     def test_post_order(self, access_token, shop, warehouse, payment_type):
         result_post_order = OrderApi.create_order(shop_id=shop[1], warehouse_id=warehouse[1], headers=access_token,
                                                   payment_type=payment_type, delivery_type='PostOffice')
-        # Записываем id заказ в переменную
-        if payment_type == "Paid":
-            TestOrder.order_id = result_post_order.json()["id"]
+
+        order_id = result_post_order.json()["id"]
+        TestOrder.order_ids[payment_type] = order_id  # Сохранение id заказа в словаре
         Checking.check_status_code(result=result_post_order, status_code=202)
         Checking.check_json_required_keys(result=result_post_order, required_key=['id', 'type', 'url', 'status'])
         Checking.check_json_value(result=result_post_order, key_name='type', expected_value='Order')
@@ -114,8 +115,9 @@ class TestOrder:
                                                 required_key=['id', 'number', 'addressTo', 'data', 'parcel', 'status',
                                                               'statusReason', 'state', 'stateMessage', 'created'])
 
-    def test_get_order(self, access_token):
-        order_id = TestOrder.order_id
+    @pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
+    def test_get_order(self, access_token, payment_type):
+        order_id = TestOrder.order_ids.get(payment_type)  # Получение сохраненного id заказа
         Checking.checking_state_order(order_id=order_id, headers=access_token)
         result_get_order = OrderApi.get_orders(order_id=order_id, headers=access_token, x_trace_id="Get_order_test")
         Checking.check_status_code(result=result_get_order, status_code=2002)
@@ -131,8 +133,9 @@ class TestOrder:
 
 @allure.epic("№5_Заказы Почты России")
 class TestParcel:
-    def test_create_new_parcel(self, access_token, shop, warehouse):
-        order_id = TestOrder.order_id
+    @pytest.mark.parametrize("payment_type", ["Paid", "PayOnDelivery"])
+    def test_create_new_parcel(self, access_token, shop, warehouse, payment_type):
+        order_id = TestOrder.order_ids.get(payment_type)
         result_post_parcel = ParcelApi.create_parcel(order_id=order_id, headers=access_token)
         Checking.check_status_code(result=result_post_parcel, status_code=207)
 
