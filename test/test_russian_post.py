@@ -11,6 +11,7 @@ class TestDeliveryService:
 
     @allure.title("Создание подключения POST")
     def test_post_connection(self, access_token, shop):
+        """Создание подключения POST"""
         result_post_connections = DeliveryServiceApi.delivery_service_russian_post(shop_id=shop[1],
                                                                                    headers=access_token)
         Checking.check_status_code(result=result_post_connections, status_code=201)

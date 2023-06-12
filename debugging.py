@@ -133,27 +133,39 @@ import re
 # print(shop_id)
 
 
-json_for_put_warehouse = {
-    "code": "RussianPost",
-    "name": "Почта России",
-    "hasAggregation": 11,
-    "credentials": {
-        "active": 22,
-        "visibility": 33,
+# json_for_put_warehouse = {
+#     "code": "RussianPost",
+#     "name": "Почта России",
+#     "hasAggregation": 11,
+#     "credentials": {
+#         "active": 22,
+#         "visibility": 33,
+#         "data": {
+#             "type": "integration",
+#             "intakePostOfficeCode": "101000",
+#             "token": "A_DlNhO2HJGXf2mx5qPyA9Z2qDiqQoiE",
+#             "secret": "dkBwaW1wYXkucnU6KEgpeW1beCtPRUoh",
+#             "useOnlineBalance": 44,
+#             "agreement": 55,
+#             "prePostalPreparation": 66,
+#             "externalDeliveryCode": 77
+#         },
+#         "settings": []
+#     }
+# }
+#
+# print(json_for_put_warehouse['credentials']['data']['type'])
+# print(json_for_put_warehouse.get('credentials', {}).get('data', {}).get('type'))
+delivery_services = {
+        "shop_id": 1,
+        "delivery_service_code": "RussianPost",
         "data": {
-            "type": "integration",
-            "intakePostOfficeCode": "101000",
             "token": "A_DlNhO2HJGXf2mx5qPyA9Z2qDiqQoiE",
             "secret": "dkBwaW1wYXkucnU6KEgpeW1beCtPRUoh",
-            "useOnlineBalance": 44,
-            "agreement": 55,
-            "prePostalPreparation": 66,
-            "externalDeliveryCode": 77
-        },
-        "settings": []
+            "type": "integration",
+            "intakePostOfficeCode": "101000"
+        }
     }
-}
 
-print(json_for_put_warehouse['credentials']['data']['type'])
-print(json_for_put_warehouse.get('credentials', {}).get('data', {}).get('type'))
 
+print(f'{delivery_services["data"]["type"]}')
